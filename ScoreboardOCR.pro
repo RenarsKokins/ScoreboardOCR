@@ -14,11 +14,13 @@ LIBS += `pkg-config --cflags --libs opencv4`
 
 SOURCES += \
     capturemanager.cpp \
+    displaymanager.cpp \
     main.cpp \
     scoreboardocr.cpp
 
 HEADERS += \
     capturemanager.h \
+    displaymanager.h \
     scoreboardocr.h
 
 FORMS += \

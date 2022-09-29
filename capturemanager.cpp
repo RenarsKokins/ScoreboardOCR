@@ -1,8 +1,8 @@
-#include "capturemanager.h"
-#include <QCameraInfo>
 #include <QDebug>
+#include <QCameraInfo>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
+#include "capturemanager.h"
 
 void CaptureManager::changeCurrentDeviceIndex(short index)
 {
@@ -28,6 +28,7 @@ int CaptureManager::initCapture()
     if (curDeviceIndex < 0)
     {
         qWarning() << "No capture device selected!";
+        flags.setFlag(CaptureManager::captureSelected, false);
         return -1;
     }
     capture.open(captureDevices[curDeviceIndex].index, cv::CAP_ANY); // Start the capture
@@ -105,5 +106,6 @@ CaptureManager::CaptureManager()
 
 CaptureManager::~CaptureManager()
 {
+    stopCapture();
     qDebug() << "Destroying caputure manager...";
 }
