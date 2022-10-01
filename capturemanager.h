@@ -21,7 +21,6 @@ public:
         captureSelected = 1,
         captureStarted = 2,
         edgesMarked = 4
-
     };
     Q_DECLARE_FLAGS(Flags, Flag);
 
@@ -31,8 +30,9 @@ public:
     ~CaptureManager();
     int initCapture();          // Starts video capture
     int stopCapture();          // Stops video capture
-    cv::Mat getFrame();         // Gets and returns captured image
     QList<Camera> getDevices(); // Returns a QList with all current devices
+    cv::Mat *getFrame();        // Returns captured frame
+    void captureFrame();        // Capture frame from camera
     void changeCurrentDeviceIndex(short); // Change current device index
 private:
     void updateDeviceList();    // Updates the device list

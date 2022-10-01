@@ -1,8 +1,9 @@
 #ifndef SCOREBOARDOCR_H
 #define SCOREBOARDOCR_H
 
-#include <QMainWindow>
 #include <QComboBox>
+#include <QMainWindow>
+#include <QCloseEvent>
 #include "capturemanager.h"
 #include "displaymanager.h"
 
@@ -21,7 +22,8 @@ public:
 public slots:
     void setCurrentDevice(int val); // Combobox device select slot
     void startCapture();            // Start capture button slot
-    void stopCapture();            // Stop capture button slot
+    void stopCapture();             // Stop capture button slot
+    void captureOneFrameAndShow();  // TEMPORARY
 
 private:
     Ui::ScoreboardOCR *ui;
@@ -30,6 +32,7 @@ private:
 
     // UI updates
     int updateDeviceDropdown();
+    void closeEvent(QCloseEvent *);
     void updateCaptureTab();
 };
 #endif // SCOREBOARDOCR_H

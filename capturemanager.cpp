@@ -13,14 +13,18 @@ void CaptureManager::changeCurrentDeviceIndex(short index)
         flags.setFlag(CaptureManager::captureSelected, true);
 }
 
-cv::Mat CaptureManager::getFrame()
+void CaptureManager::captureFrame()
 {
     capture.read(frame);
     if (frame.empty())
     {
         qWarning() << "BLANK frame grabbed from capture device!";
     }
-    return frame;
+}
+
+cv::Mat *CaptureManager::getFrame()
+{
+    return &frame;
 }
 
 int CaptureManager::initCapture()
