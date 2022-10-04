@@ -102,6 +102,18 @@ void CaptureManager::updateDeviceList()
     }
 }
 
+void CaptureManager::startMarkingEdges()
+{
+    flags.setFlag(CaptureManager::capturingEdges, true);
+    flags.setFlag(CaptureManager::edgesMarked, false);
+}
+
+void CaptureManager::clearEdges()
+{
+    flags.setFlag(CaptureManager::capturingEdges, false);
+    flags.setFlag(CaptureManager::edgesMarked, false);
+}
+
 CaptureManager::CaptureManager()
 {
     qDebug() << "Initiating caputure manager...";
