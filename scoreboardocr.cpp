@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QMessageBox>
+#include "qgraphicsitem.h"
 #include "scoreboardocr.h"
 #include "ui_scoreboardocr.h"
 
@@ -31,11 +32,6 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));  // Combobox device select
     connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                  // Capture button pressed
     connect(ui->edgesButton, SIGNAL(released()), this, SLOT(doEdges()));                                      // Edges button pressed
-
-    //connect(ui->startCaptureButton, SIGNAL(released()), this, SLOT(startCapture()));                          // Start capture button
-    //connect(ui->stopCaptureButton, SIGNAL(released()), this, SLOT(stopCapture()));                            // Stop capture button
-    //connect(ui->markEdgesButton, SIGNAL(released()), this, SLOT(startMarkingEdges()));                        // Start marking edges
-    //connect(ui->clearEdgesButton, SIGNAL(released()), this, SLOT(clearEdges()));                              // Clear marked edges
 }
 
 ScoreboardOCR::~ScoreboardOCR()
@@ -152,16 +148,22 @@ void ScoreboardOCR::closeEvent(QCloseEvent* event)
 
 void ScoreboardOCR::displayMainImage(cv::Mat *img)
 {
-    mainGraphicsScene->clear();
-    mainGraphicsScene->addPixmap(mat2pix(img));
-    ui->mainImage->fitInView(mainGraphicsScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+    if(mainGraphicsScene->items().count() < 1)
+    {
+        mainPixmap = mainGraphicsScene->addPixmap(mat2pix(img));
+        ui->mainImage->fitInView(mainPixmap, Qt::KeepAspectRatio);
+    }
+    mainPixmap->setPixmap(mat2pix(img));
 }
 
 void ScoreboardOCR::displaySmallImage(cv::Mat *img)
 {
-    smallGraphicsScene->clear();
-    smallGraphicsScene->addPixmap(mat2pix(img));
-    ui->smallImage->fitInView(smallGraphicsScene->itemsBoundingRect(), Qt::KeepAspectRatio);
+    if(smallGraphicsScene->items().count() < 1)
+    {
+        smallPixmap = smallGraphicsScene->addPixmap(mat2pix(img));
+        ui->smallImage->fitInView(smallPixmap, Qt::KeepAspectRatio);
+    }
+    smallPixmap->setPixmap(mat2pix(img));
 }
 
 QPixmap ScoreboardOCR::mat2pix(cv::Mat *img)

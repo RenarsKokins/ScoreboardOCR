@@ -23,7 +23,7 @@ void MainWorker::doWork()
         // save data
         // signal small and main image display
 
-        QThread::msleep(50);
+        // QThread::msleep(500);
 
         capManager->captureFrame();
         emit setSmallImage(capManager->getFrame());

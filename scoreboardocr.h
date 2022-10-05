@@ -38,6 +38,8 @@ private:
     CaptureManager *capManager;         // Main capture manager
     QGraphicsScene *mainGraphicsScene;  // Main graphics scene
     QGraphicsScene *smallGraphicsScene; // Small graphics scene
+    QGraphicsPixmapItem *mainPixmap;
+    QGraphicsPixmapItem *smallPixmap;
 
     QPixmap mat2pix(cv::Mat *img);      // Convert mat image to pixmap
 
