@@ -7,7 +7,9 @@
 #include <QCloseEvent>
 #include <QGraphicsScene>
 #include "mainworker.h"
+#include "capturescene.h"
 #include "capturemanager.h"
+#include "maincapturescene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ScoreboardOCR; }
@@ -25,6 +27,7 @@ public slots:
     void doEdges();                     // edges button slot
     void doCapture();                   // Capture button slot
     void setCurrentDevice(int val);     // Combobox device select slot
+    void updateEdges(QList<QPoint>);    // Update edges for image transformation
     void displayMainImage(cv::Mat *);   // Display main image in GUI
     void displaySmallImage(cv::Mat *);  // Display small image in GUI
 
@@ -36,16 +39,13 @@ private:
     QThread workerThread;               // Place where MainWorker operates
     MainWorker *mainWorker;             // Thread where all processes happen (capture, filters, etc.)
     CaptureManager *capManager;         // Main capture manager
-    QGraphicsScene *mainGraphicsScene;  // Main graphics scene
-    QGraphicsScene *smallGraphicsScene; // Small graphics scene
-    QGraphicsPixmapItem *mainPixmap;
-    QGraphicsPixmapItem *smallPixmap;
-
-    QPixmap mat2pix(cv::Mat *img);      // Convert mat image to pixmap
+    CaptureScene *smallGraphicsScene;   // Small graphics scene
+    MainCaptureScene *mainGraphicsScene;// Main graphics scene
 
     // UI updates
-    int updateDeviceDropdown();
-    void closeEvent(QCloseEvent *);
     void updateCaptureTab();
+    int updateDeviceDropdown();
+    void closeEvent(QCloseEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
 };
 #endif // SCOREBOARDOCR_H

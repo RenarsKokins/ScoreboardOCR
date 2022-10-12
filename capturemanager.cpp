@@ -114,6 +114,22 @@ void CaptureManager::clearEdges()
     flags.setFlag(CaptureManager::edgesMarked, false);
 }
 
+void CaptureManager::setEdges(QList<QPoint> points)
+{
+    edges.clear();
+    for (QPoint point : points)
+    {
+        edges.append(point);
+    }
+    flags.setFlag(CaptureManager::capturingEdges, false);
+    flags.setFlag(CaptureManager::edgesMarked, true);
+}
+
+QList<QPoint> *CaptureManager::getEdges()
+{
+    return &edges;
+}
+
 CaptureManager::CaptureManager()
 {
     qDebug() << "Initiating caputure manager...";

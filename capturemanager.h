@@ -1,10 +1,11 @@
 #ifndef CAPTUREMANAGER_H
 #define CAPTUREMANAGER_H
-#include <opencv2/videoio.hpp>
-#include <opencv2/core.hpp>
-#include <QString>
 #include <QList>
 #include <QFlags>
+#include <QPoint>
+#include <QString>
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
 
 struct Camera
 {
@@ -37,6 +38,8 @@ public:
     void clearEdges();          // Clears edges in capture manager
     void startMarkingEdges();   // Sets up capture manager to capture edges
     void changeCurrentDeviceIndex(short); // Change current device index
+    QList<QPoint> *getEdges();            // Set edges for transform
+    void setEdges(QList<QPoint>);         // Set edges for transform
 private:
     void updateDeviceList();    // Updates the device list
 
@@ -45,6 +48,7 @@ private:
 
     short curDeviceIndex;           // Stores index of current selected capture device
     QList<Camera> captureDevices;   // Stores all available capture devices
+    QList<QPoint> edges;            // Stores edges for transform
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CaptureManager::Flags);

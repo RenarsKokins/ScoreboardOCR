@@ -14,12 +14,18 @@ LIBS += `pkg-config --cflags --libs opencv4`
 
 SOURCES += \
     capturemanager.cpp \
+    capturescene.cpp \
+    filtermanager.cpp \
     main.cpp \
+    maincapturescene.cpp \
     mainworker.cpp \
     scoreboardocr.cpp
 
 HEADERS += \
     capturemanager.h \
+    capturescene.h \
+    filtermanager.h \
+    maincapturescene.h \
     mainworker.h \
     scoreboardocr.h
 

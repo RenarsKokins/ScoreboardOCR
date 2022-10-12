@@ -1,6 +1,5 @@
 #include <QDebug>
 #include <QMessageBox>
-#include "qgraphicsitem.h"
 #include "scoreboardocr.h"
 #include "ui_scoreboardocr.h"
 
@@ -8,14 +7,17 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ScoreboardOCR)
 {
+    // Initialize managers
+    capManager = new CaptureManager();
+
+    // Initialize UI
     ui->setupUi(this);
-    mainGraphicsScene = new QGraphicsScene(this);
-    smallGraphicsScene = new QGraphicsScene(this);
+    mainGraphicsScene = new MainCaptureScene(this, capManager);
+    connect(mainGraphicsScene, SIGNAL(updateEdges(QList<QPoint>)), this, SLOT(updateEdges(QList<QPoint>)));
+    smallGraphicsScene = new CaptureScene(this);
     ui->mainImage->setScene(mainGraphicsScene);
     ui->smallImage->setScene(smallGraphicsScene);
 
-    // Initialize managers
-    capManager = new CaptureManager();
 
     // Initialize main worker thread
     mainWorker = new MainWorker();
@@ -82,9 +84,15 @@ void ScoreboardOCR::updateCaptureTab()
 
     if (capManager->flags.testFlag(CaptureManager::edgesMarked))
     {
+        ui->edgesButton->setDisabled(false);
         ui->edgesButton->setText("Clear edges");
+    } else if (capManager->flags.testFlag(CaptureManager::capturingEdges))
+    {
+        ui->edgesButton->setDisabled(true);
+        ui->edgesButton->setText("Marking edges...");
     } else
     {
+        ui->edgesButton->setDisabled(false);
         ui->edgesButton->setText("Mark edges");
     }
 }
@@ -146,63 +154,38 @@ void ScoreboardOCR::closeEvent(QCloseEvent* event)
     }
 }
 
+void ScoreboardOCR::resizeEvent(QResizeEvent *event)
+{
+    ui->mainImage->fitInView(mainGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
+    ui->smallImage->fitInView(smallGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
+}
+
 void ScoreboardOCR::displayMainImage(cv::Mat *img)
 {
-    if(mainGraphicsScene->items().count() < 1)
-    {
-        mainPixmap = mainGraphicsScene->addPixmap(mat2pix(img));
-        ui->mainImage->fitInView(mainPixmap, Qt::KeepAspectRatio);
-    }
-    mainPixmap->setPixmap(mat2pix(img));
+    mainGraphicsScene->paintBackground(img);
+    mainGraphicsScene->paintForeground();
 }
 
 void ScoreboardOCR::displaySmallImage(cv::Mat *img)
 {
-    if(smallGraphicsScene->items().count() < 1)
-    {
-        smallPixmap = smallGraphicsScene->addPixmap(mat2pix(img));
-        ui->smallImage->fitInView(smallPixmap, Qt::KeepAspectRatio);
-    }
-    smallPixmap->setPixmap(mat2pix(img));
-}
-
-QPixmap ScoreboardOCR::mat2pix(cv::Mat *img)
-{
-    switch(img->type())
-    {
-    case CV_8UC4:
-        {
-            QImage qimg(img->data, img->cols, img->rows, img->step, QImage::Format_ARGB32);
-            return QPixmap::fromImage(qimg);
-            break;
-        }
-    case CV_8UC3:
-        {
-            QImage qimg(img->data, img->cols, img->rows, img->step, QImage::Format_RGB888);
-            return QPixmap::fromImage(qimg.rgbSwapped());
-            break;
-        }
-    case CV_8UC1:
-        {
-            QImage qimg(img->data, img->cols, img->rows, img->step, QImage::Format_Grayscale8);
-            return QPixmap::fromImage(qimg);
-            break;
-        }
-    default:
-        qWarning() << "Mat2pix - unknown format!";
-    }
-    return QPixmap();
+    smallGraphicsScene->paintBackground(img);
 }
 
 void ScoreboardOCR::doEdges()
 {
     if(capManager->flags.testFlag(CaptureManager::edgesMarked))
     {
-        capManager->startMarkingEdges();
+        capManager->clearEdges();
+        mainGraphicsScene->clearEdgePoints();
     } else
     {
-        capManager->clearEdges();
+        capManager->startMarkingEdges();
     }
     updateCaptureTab();
 }
 
+void ScoreboardOCR::updateEdges(QList<QPoint> points)
+{
+    capManager->setEdges(points);
+    updateCaptureTab();
+}
