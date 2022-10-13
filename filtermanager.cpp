@@ -39,12 +39,22 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
 
     cv::Mat M = cv::getPerspectiveTransform(src, dst);
     cv::Size dsize = cv::Size(image->cols, image->rows);
-    cv::warpPerspective(*image, img, M, dsize); // Warp image
-    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY); // Convert image to grayscale
+    cv::warpPerspective(*image, img, M, dsize);  // Warp image
+    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);  // Convert image to grayscale
 
     if(blur != 0)
         cv::blur(img, img, cv::Size(blur, blur));   // Blur image
     cv::threshold(img, img, threshold, 255, 0);     // Apply threshold
+
+    // Apply fill gaps (it is just dialate and erode together)
+    if(fillGaps != 0)
+    {
+        cv::Mat element = cv::getStructuringElement( cv::MORPH_RECT,
+                             cv::Size( 2 * fillGaps + 1, 2 * fillGaps + 1 ),
+                             cv::Point( fillGaps, fillGaps ));
+        cv::dilate(img, img, element);
+        cv::erode(img, img, element);
+    }
 
     // Apply dialation, if necessary
     if(dialate != 0)

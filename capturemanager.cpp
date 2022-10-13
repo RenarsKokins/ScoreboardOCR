@@ -117,10 +117,31 @@ void CaptureManager::clearEdges()
 void CaptureManager::setEdges(QList<QPoint> points)
 {
     edges.clear();
-    for (QPoint point : points)
+    for (QPoint &point : points)
     {
         edges.append(point);
     }
+
+    // Sort edges list by Y value (ascending)
+    for (int j = 0; j < 3; j++)
+    {
+        if(edges[j].y() > edges[j+1].y())
+        {
+            edges.swapItemsAt(j, j+1);
+            j = 0;
+        }
+    }
+
+    // Sort edges list by X value
+    if(edges[0].x() > edges[1].x())
+    {
+        edges.swapItemsAt(0, 1);
+    }
+    if(edges[2].x() > edges[3].x())
+    {
+        edges.swapItemsAt(2, 3);
+    }
+
     flags.setFlag(CaptureManager::capturingEdges, false);
     flags.setFlag(CaptureManager::edgesMarked, true);
 }
