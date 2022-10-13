@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include "mainworker.h"
 #include "capturescene.h"
+#include "filtermanager.h"
 #include "capturemanager.h"
 #include "maincapturescene.h"
 
@@ -26,6 +27,12 @@ public:
 public slots:
     void doEdges();                     // edges button slot
     void doCapture();                   // Capture button slot
+    void changeGaps(int);               // Change threshold value in FilterManager
+    void changeBlur(int);               // Change blur value in FilterManager
+    void changeErode(int);              // Change erode value in FilterManager
+    void changeItalic(int);             // Change italic value in FilterManager
+    void changeDialate(int);            // Change dialate value in FilterManager
+    void changeThreshold(int);          // Change threshold value in FilterManager
     void setCurrentDevice(int val);     // Combobox device select slot
     void updateEdges(QList<QPoint>);    // Update edges for image transformation
     void displayMainImage(cv::Mat *);   // Display main image in GUI
@@ -38,6 +45,7 @@ private:
     Ui::ScoreboardOCR *ui;              // Pointer to main UI
     QThread workerThread;               // Place where MainWorker operates
     MainWorker *mainWorker;             // Thread where all processes happen (capture, filters, etc.)
+    FilterManager *filManager;          // Filter manager (applies transforms, thresholds, etc.)
     CaptureManager *capManager;         // Main capture manager
     CaptureScene *smallGraphicsScene;   // Small graphics scene
     MainCaptureScene *mainGraphicsScene;// Main graphics scene

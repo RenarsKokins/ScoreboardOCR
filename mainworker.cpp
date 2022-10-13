@@ -30,6 +30,9 @@ void MainWorker::doWork()
 
         if(!capManager->flags.testFlag(CaptureManager::edgesMarked)) {
             emit setMainImage(capManager->getFrame());
+        } else {
+            filManager->createImageWithFilters(capManager->getFrame(), *capManager->getEdges());
+            emit setMainImage(filManager->getImageWithFilters());
         }
     }
 }
@@ -37,4 +40,9 @@ void MainWorker::doWork()
 void MainWorker::addCaptureManager(CaptureManager *cap)
 {
     capManager = cap;
+}
+
+void MainWorker::addFilterManager(FilterManager *fil)
+{
+    filManager = fil;
 }

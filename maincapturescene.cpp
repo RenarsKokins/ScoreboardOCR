@@ -76,6 +76,9 @@ void MainCaptureScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
         drawEdgePoints();
 
         if(points.count() == 4)
+        {
+            clearEdgePoints();
             emit updateEdges(points);
+        }
     }
 }

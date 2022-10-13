@@ -2,6 +2,7 @@
 #define MAINWORKER_H
 
 #include <QObject>
+#include "filtermanager.h"
 #include "capturemanager.h"
 
 class MainWorker : public QObject
@@ -10,6 +11,7 @@ class MainWorker : public QObject
 public:
     MainWorker();
     ~MainWorker();
+    void addFilterManager(FilterManager *);
     void addCaptureManager(CaptureManager *);
 
 public slots:
@@ -20,6 +22,7 @@ signals:
     void setSmallImage(cv::Mat *);   // Signal to set main image
 
 private:
+    FilterManager *filManager;     // Pointer to FilterManager
     CaptureManager *capManager;     // Pointer to CaptureManager
 };
 

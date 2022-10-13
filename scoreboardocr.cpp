@@ -8,6 +8,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     , ui(new Ui::ScoreboardOCR)
 {
     // Initialize managers
+    filManager = new FilterManager();
     capManager = new CaptureManager();
 
     // Initialize UI
@@ -22,6 +23,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     // Initialize main worker thread
     mainWorker = new MainWorker();
     mainWorker->moveToThread(&workerThread);
+    mainWorker->addFilterManager(filManager);
     mainWorker->addCaptureManager(capManager);
     connect(this, SIGNAL(startMainWorker()), mainWorker, SLOT(doWork()));
     connect(mainWorker, SIGNAL(setMainImage(cv::Mat*)), this, SLOT(displayMainImage(cv::Mat*)));
@@ -31,9 +33,16 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     updateDeviceDropdown();
 
     // Connect UI signals/slots
-    connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));  // Combobox device select
-    connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                  // Capture button pressed
-    connect(ui->edgesButton, SIGNAL(released()), this, SLOT(doEdges()));                                      // Edges button pressed
+    connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));    // Combobox device select
+    connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                    // Capture button pressed
+    connect(ui->edgesButton, SIGNAL(released()), this, SLOT(doEdges()));                                        // Edges button pressed
+
+    connect(ui->blurSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBlur(int)));                // Update blur
+    connect(ui->gapsSlider, SIGNAL(valueChanged(int)), this, SLOT(changeGaps(int)));                // Update gaps
+    connect(ui->erodeSlider, SIGNAL(valueChanged(int)), this, SLOT(changeErode(int)));              // Update erode
+    connect(ui->italicSlider, SIGNAL(valueChanged(int)), this, SLOT(changeItalic(int)));            // Update italic
+    connect(ui->dialateSlider, SIGNAL(valueChanged(int)), this, SLOT(changeDialate(int)));          // Update dialate
+    connect(ui->thresholdSlider, SIGNAL(valueChanged(int)), this, SLOT(changeThreshold(int)));      // Update threshold
 }
 
 ScoreboardOCR::~ScoreboardOCR()
@@ -188,4 +197,34 @@ void ScoreboardOCR::updateEdges(QList<QPoint> points)
 {
     capManager->setEdges(points);
     updateCaptureTab();
+}
+
+void ScoreboardOCR::changeGaps(int val)
+{
+    filManager->setFillGaps(val);
+}
+
+void ScoreboardOCR::changeBlur(int val)
+{
+    filManager->setBlur(val);
+}
+
+void ScoreboardOCR::changeErode(int val)
+{
+    filManager->setErode(val);
+}
+
+void ScoreboardOCR::changeItalic(int val)
+{
+    filManager->setItalic(val);
+}
+
+void ScoreboardOCR::changeDialate(int val)
+{
+    filManager->setDialate(val);
+}
+
+void ScoreboardOCR::changeThreshold(int val)
+{
+    filManager->setThreshold(val);
 }

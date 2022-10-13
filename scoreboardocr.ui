@@ -37,7 +37,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QSlider" name="horizontalSlider_3">
+       <widget class="QSlider" name="gapsSlider">
         <property name="maximum">
          <number>10</number>
         </property>
@@ -50,7 +50,7 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QSlider" name="horizontalSlider_4">
+       <widget class="QSlider" name="erodeSlider">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -69,12 +69,18 @@
        </widget>
       </item>
       <item row="2" column="3">
-       <widget class="QSlider" name="horizontalSlider_6">
+       <widget class="QSlider" name="italicSlider">
+        <property name="minimum">
+         <number>-25</number>
+        </property>
         <property name="maximum">
-         <number>50</number>
+         <number>25</number>
+        </property>
+        <property name="pageStep">
+         <number>10</number>
         </property>
         <property name="value">
-         <number>25</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -82,12 +88,15 @@
         <property name="tickPosition">
          <enum>QSlider::TicksBelow</enum>
         </property>
+        <property name="tickInterval">
+         <number>2</number>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QSlider" name="horizontalSlider_2">
+       <widget class="QSlider" name="blurSlider">
         <property name="maximum">
-         <number>7</number>
+         <number>24</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -112,7 +121,7 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="QSlider" name="horizontalSlider_5">
+       <widget class="QSlider" name="dialateSlider">
         <property name="maximum">
          <number>10</number>
         </property>
@@ -139,7 +148,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSlider" name="horizontalSlider">
+       <widget class="QSlider" name="thresholdSlider">
         <property name="minimumSize">
          <size>
           <width>80</width>
@@ -148,6 +157,9 @@
         </property>
         <property name="maximum">
          <number>255</number>
+        </property>
+        <property name="value">
+         <number>127</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
