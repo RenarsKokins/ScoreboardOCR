@@ -19,7 +19,12 @@ SOURCES += \
     main.cpp \
     maincapturescene.cpp \
     mainworker.cpp \
-    scoreboardocr.cpp
+    recognitionmanager.cpp \
+    scoreboardocr.cpp \
+    selection.cpp \
+    selectiondialog.cpp \
+    selectiontype.cpp \
+    selectionwidget.cpp
 
 HEADERS += \
     capturemanager.h \
@@ -27,10 +32,17 @@ HEADERS += \
     filtermanager.h \
     maincapturescene.h \
     mainworker.h \
-    scoreboardocr.h
+    recognitionmanager.h \
+    scoreboardocr.h \
+    selection.h \
+    selectiondialog.h \
+    selectiontype.h \
+    selectionwidget.h
 
 FORMS += \
-    scoreboardocr.ui
+    scoreboardocr.ui \
+    selectiondialog.ui \
+    selectionwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

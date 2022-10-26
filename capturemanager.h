@@ -25,7 +25,6 @@ public:
         edgesMarked = 8
     };
     Q_DECLARE_FLAGS(Flags, Flag);
-
     Flags flags;                // Contains capture and device related flags
 
     CaptureManager();

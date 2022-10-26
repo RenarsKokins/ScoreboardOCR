@@ -1,6 +1,9 @@
 #include <QDebug>
 #include <QMessageBox>
+#include <QListWidgetItem>
 #include "scoreboardocr.h"
+#include "selectionwidget.h"
+#include "selectiondialog.h"
 #include "ui_scoreboardocr.h"
 
 ScoreboardOCR::ScoreboardOCR(QWidget *parent)
@@ -10,15 +13,16 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     // Initialize managers
     filManager = new FilterManager();
     capManager = new CaptureManager();
+    recManager = new RecognitionManager();
 
     // Initialize UI
     ui->setupUi(this);
-    mainGraphicsScene = new MainCaptureScene(this, capManager);
-    connect(mainGraphicsScene, SIGNAL(updateEdges(QList<QPoint>)), this, SLOT(updateEdges(QList<QPoint>)));
     smallGraphicsScene = new CaptureScene(this);
+    mainGraphicsScene = new MainCaptureScene(this, capManager, recManager);
     ui->mainImage->setScene(mainGraphicsScene);
     ui->smallImage->setScene(smallGraphicsScene);
-
+    connect(mainGraphicsScene, SIGNAL(updateEdges(QList<QPoint>)), this, SLOT(updateEdges(QList<QPoint>)));
+    connect(mainGraphicsScene, SIGNAL(updateSelectionCoordinates(QRect)), this, SLOT(updateSelectionCoordinates(QRect)));
 
     // Initialize main worker thread
     mainWorker = new MainWorker();
@@ -33,9 +37,9 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     updateDeviceDropdown();
 
     // Connect UI signals/slots
-    connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));    // Combobox device select
-    connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                    // Capture button pressed
     connect(ui->edgesButton, SIGNAL(released()), this, SLOT(doEdges()));                                        // Edges button pressed
+    connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                    // Capture button pressed
+    connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));    // Combobox device select
 
     connect(ui->blurSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBlur(int)));                // Update blur
     connect(ui->gapsSlider, SIGNAL(valueChanged(int)), this, SLOT(changeGaps(int)));                // Update gaps
@@ -43,6 +47,9 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(ui->italicSlider, SIGNAL(valueChanged(int)), this, SLOT(changeItalic(int)));            // Update italic
     connect(ui->dialateSlider, SIGNAL(valueChanged(int)), this, SLOT(changeDialate(int)));          // Update dialate
     connect(ui->thresholdSlider, SIGNAL(valueChanged(int)), this, SLOT(changeThreshold(int)));      // Update threshold
+
+    connect(ui->addSelectionButton, SIGNAL(released()), this, SLOT(addSelection()));                // Add selection button pressed
+    connect(ui->deleteSelectionButton, SIGNAL(released()), this, SLOT(deleteSelection()));          // Delete selection button pressed
 }
 
 ScoreboardOCR::~ScoreboardOCR()
@@ -56,6 +63,9 @@ ScoreboardOCR::~ScoreboardOCR()
     }
     delete ui;
     delete capManager;
+    delete filManager;
+    delete recManager;
+    delete mainWorker;
 }
 
 int ScoreboardOCR::updateDeviceDropdown()
@@ -103,6 +113,19 @@ void ScoreboardOCR::updateCaptureTab()
     {
         ui->edgesButton->setDisabled(false);
         ui->edgesButton->setText("Mark edges");
+    }
+}
+
+void ScoreboardOCR::updateRecognitionTab()
+{
+    if (recManager->flags.testFlag(RecognitionManager::selectingSelection))
+    {
+        ui->addSelectionButton->setEnabled(false);
+        ui->deleteSelectionButton->setEnabled(false);
+    } else
+    {
+        ui->addSelectionButton->setEnabled(true);
+        ui->deleteSelectionButton->setEnabled(true);
     }
 }
 
@@ -172,7 +195,7 @@ void ScoreboardOCR::resizeEvent(QResizeEvent *event)
 void ScoreboardOCR::displayMainImage(cv::Mat *img)
 {
     mainGraphicsScene->paintBackground(img);
-    mainGraphicsScene->paintForeground();
+    // mainGraphicsScene->paintForeground();
 }
 
 void ScoreboardOCR::displaySmallImage(cv::Mat *img)
@@ -227,4 +250,46 @@ void ScoreboardOCR::changeDialate(int val)
 void ScoreboardOCR::changeThreshold(int val)
 {
     filManager->setThreshold(val);
+}
+
+void ScoreboardOCR::addSelection()
+{
+    SelectionDialog dialog(this);
+    bool accepted = 0;
+    accepted = dialog.exec();
+    if(!accepted)
+        return;
+    Selection *sel = recManager->addSelection(dialog.getName(), dialog.getType());  // Add selection in recognition manager
+    SelectionWidget *selWid = new SelectionWidget();    // Create widget for UI list
+    selWid->addSelection(sel);                          // Add selection data to widget
+    QListWidgetItem *item = new QListWidgetItem();      // Create widget item to put widget in
+    item->setSizeHint(selWid->sizeHint());
+    ui->recognitionListWidget->addItem(item);
+    ui->recognitionListWidget->setItemWidget(item, selWid);
+    selWid->updateSelection();
+    updateRecognitionTab();
+}
+
+void ScoreboardOCR::deleteSelection()
+{
+    QListWidgetItem *selection = ui->recognitionListWidget->currentItem();
+    if(!selection)
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Choose a selection to be deleted!"), QMessageBox::Ok);
+        return;
+    }
+    int i = ui->recognitionListWidget->currentRow();    // Save index of current selection
+    SelectionWidget *selWid = static_cast<SelectionWidget *>(ui->recognitionListWidget->itemWidget(selection));    // Get SelectionWidget pointer
+    recManager->deleteSelection(selWid->getSelection());    // Remove selection from RecognitionManager
+    ui->recognitionListWidget->removeItemWidget(selection); // Remove selection from widget list
+    mainGraphicsScene->removeSelection(i);                  // Remove selection from graphics scene at index
+    delete ui->recognitionListWidget->itemWidget(selection);
+    delete selection;
+    updateRecognitionTab();
+}
+
+void ScoreboardOCR::updateSelectionCoordinates(QRect rect)
+{
+    recManager->updateSelectionCoordinates(rect);
+    updateRecognitionTab();
 }

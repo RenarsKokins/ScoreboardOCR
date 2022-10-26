@@ -128,7 +128,7 @@ void CaptureManager::setEdges(QList<QPoint> points)
         if(edges[j].y() > edges[j+1].y())
         {
             edges.swapItemsAt(j, j+1);
-            j = 0;
+            j = -1;
         }
     }
 
