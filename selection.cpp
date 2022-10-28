@@ -37,3 +37,18 @@ void Selection::setSelectionPos(int x, int y, int w, int h)
     rect.setWidth(w);
     rect.setHeight(h);
 }
+
+void Selection::addNumber(cv::Mat img)
+{
+    numbers.append(img);
+}
+
+void Selection::clearNumbers()
+{
+    numbers.clear();
+}
+
+QVector<cv::Mat> *Selection::getNumbers()
+{
+    return &numbers;
+}

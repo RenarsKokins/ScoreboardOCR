@@ -29,6 +29,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     mainWorker->moveToThread(&workerThread);
     mainWorker->addFilterManager(filManager);
     mainWorker->addCaptureManager(capManager);
+    mainWorker->addRecognitionManager(recManager);
     connect(this, SIGNAL(startMainWorker()), mainWorker, SLOT(doWork()));
     connect(mainWorker, SIGNAL(setMainImage(cv::Mat*)), this, SLOT(displayMainImage(cv::Mat*)));
     connect(mainWorker, SIGNAL(setSmallImage(cv::Mat*)), this, SLOT(displaySmallImage(cv::Mat*)));

@@ -30,10 +30,13 @@ void MainWorker::doWork()
 
         if(!capManager->flags.testFlag(CaptureManager::edgesMarked)) {
             emit setMainImage(capManager->getFrame());
-        } else {
-            filManager->createImageWithFilters(capManager->getFrame(), *capManager->getEdges());
-            emit setMainImage(filManager->getImageWithFilters());
+            continue;
         }
+        filManager->createImageWithFilters(capManager->getFrame(), *capManager->getEdges());
+        emit setMainImage(filManager->getImageWithFilters());
+        if(!recManager->selectionsAdded())
+            continue;
+        recManager->findNumbers(filManager->getImageWithFilters());
     }
 }
 
@@ -45,4 +48,9 @@ void MainWorker::addCaptureManager(CaptureManager *cap)
 void MainWorker::addFilterManager(FilterManager *fil)
 {
     filManager = fil;
+}
+
+void MainWorker::addRecognitionManager(RecognitionManager *rec)
+{
+    recManager = rec;
 }
