@@ -11,7 +11,6 @@ INCLUDEPATH += /usr/include/opencv4
 
 LIBS += `pkg-config --cflags --libs opencv4`
 
-
 SOURCES += \
     capturemanager.cpp \
     capturescene.cpp \
@@ -24,7 +23,9 @@ SOURCES += \
     selection.cpp \
     selectiondialog.cpp \
     selectiontype.cpp \
-    selectionwidget.cpp
+    selectionwidget.cpp \
+    settingsdialog.cpp \
+    settingsmanager.cpp
 
 HEADERS += \
     capturemanager.h \
@@ -37,12 +38,15 @@ HEADERS += \
     selection.h \
     selectiondialog.h \
     selectiontype.h \
-    selectionwidget.h
+    selectionwidget.h \
+    settingsdialog.h \
+    settingsmanager.h
 
 FORMS += \
     scoreboardocr.ui \
     selectiondialog.ui \
-    selectionwidget.ui
+    selectionwidget.ui \
+    settingsdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -50,4 +54,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    graphics/logo.png
+    graphics/logo.png \
+    settings.csv

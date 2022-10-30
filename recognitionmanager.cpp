@@ -73,7 +73,7 @@ void RecognitionManager::findNumbers(cv::Mat *img)
         {
             rect = cv::boundingRect(contour);
             // filter out non-numbers (numbers are usually taller than size of width + not super small)
-            if((rect.height < rect.width) || (rect.height < noiseIgnoreSize) || (rect.height < (qRect.width() * 0.5)))
+            if((rect.height < rect.width) || (rect.height < noiseIgnoreSize) || (rect.height < (qRect.width() * noiseIgnoreRatio)))
                 continue;
             number = cv::Mat(croppedImg, rect).clone();
 
@@ -104,4 +104,28 @@ void RecognitionManager::findNumbers(cv::Mat *img)
 bool RecognitionManager::selectionsAdded()
 {
     return !selections.isEmpty();
+}
+
+void RecognitionManager::recognizeNumbers()
+{
+    for(Selection &selection : selections)
+    {
+        selection.clearRawRecognitionNumbers();
+        for(cv::Mat &number : *selection.getNumbers())
+        {
+            float response = svm->predict(number);
+            selection.addRawRecognitionNumber(response);
+        }
+    }
+}
+
+void RecognitionManager::loadSVM()
+{
+    try {
+        svm->load(svmPath.toStdString());
+        flags.setFlag(RecognitionManager::svmLoaded, true);
+    } catch (...) {
+        qDebug() << "Couldn't load svm!";
+        flags.setFlag(RecognitionManager::svmLoaded, false);
+    }
 }

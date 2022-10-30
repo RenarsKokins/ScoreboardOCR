@@ -52,3 +52,18 @@ QVector<cv::Mat> *Selection::getNumbers()
 {
     return &numbers;
 }
+
+void Selection::addRawRecognitionNumber(int i)
+{
+    rawRecognitionNumbers.append(i);
+}
+
+void Selection::clearRawRecognitionNumbers()
+{
+    rawRecognitionNumbers.clear();
+}
+
+QVector<int> *Selection::getRawRecognitionNumbers()
+{
+    return &rawRecognitionNumbers;
+}

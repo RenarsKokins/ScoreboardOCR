@@ -10,6 +10,7 @@
 #include "capturescene.h"
 #include "filtermanager.h"
 #include "capturemanager.h"
+#include "settingsmanager.h"
 #include "maincapturescene.h"
 #include "recognitionmanager.h"
 
@@ -28,6 +29,7 @@ public:
 public slots:
     void doEdges();                     // edges button slot
     void doCapture();                   // Capture button slot
+    void openSettings();                // Display settings dialog
     void addSelection();                // Display selection dialog
     void changeGaps(int);               // Change threshold value in FilterManager
     void changeBlur(int);               // Change blur value in FilterManager
@@ -52,6 +54,7 @@ private:
     FilterManager *filManager;          // Filter manager (applies transforms, thresholds, etc.)
     CaptureManager *capManager;         // Main capture manager
     RecognitionManager *recManager;     // Recognition manager (detects numbers, defines boxes, etc.)
+    SettingsManager *settingsManager;   // Settings manager
     CaptureScene *smallGraphicsScene;   // Small graphics scene
     MainCaptureScene *mainGraphicsScene;// Main graphics scene
 

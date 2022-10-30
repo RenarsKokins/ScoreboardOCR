@@ -15,6 +15,14 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     capManager = new CaptureManager();
     recManager = new RecognitionManager();
 
+    // Load settings
+    settingsManager = new SettingsManager();
+    settingsManager->addRecognitionManager(recManager);
+    settingsManager->loadSettings();
+
+    // Initialize SVM
+    recManager->loadSVM();
+
     // Initialize UI
     ui->setupUi(this);
     smallGraphicsScene = new CaptureScene(this);
@@ -38,6 +46,8 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     updateDeviceDropdown();
 
     // Connect UI signals/slots
+    connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
+
     connect(ui->edgesButton, SIGNAL(released()), this, SLOT(doEdges()));                                        // Edges button pressed
     connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                    // Capture button pressed
     connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));    // Combobox device select
@@ -67,6 +77,7 @@ ScoreboardOCR::~ScoreboardOCR()
     delete filManager;
     delete recManager;
     delete mainWorker;
+    delete settingsManager;
 }
 
 int ScoreboardOCR::updateDeviceDropdown()
@@ -293,4 +304,9 @@ void ScoreboardOCR::updateSelectionCoordinates(QRect rect)
 {
     recManager->updateSelectionCoordinates(rect);
     updateRecognitionTab();
+}
+
+void ScoreboardOCR::openSettings()
+{
+    qDebug() << "I eat boogers";
 }
