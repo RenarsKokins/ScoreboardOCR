@@ -33,7 +33,7 @@ public:
     int stopCapture();          // Stops video capture
     QList<Camera> getDevices(); // Returns a QList with all current devices
     cv::Mat *getFrame();        // Returns captured frame
-    void captureFrame();        // Capture frame from camera
+    bool captureFrame();        // Capture frame from camera
     void clearEdges();          // Clears edges in capture manager
     void startMarkingEdges();   // Sets up capture manager to capture edges
     void changeCurrentDeviceIndex(short); // Change current device index

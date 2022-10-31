@@ -166,14 +166,14 @@ void ScoreboardOCR::doCapture()
         }
     } else
     {
-        if(!capManager->stopCapture())
-            QMessageBox::warning(this, tr("Warning"), tr("No capture device has been opened so capture has already been stopped!"), QMessageBox::Close);
         if(workerThread.isRunning())
         {
             workerThread.requestInterruption();
             workerThread.quit();
             workerThread.wait();
         }
+        if(!capManager->stopCapture())
+            QMessageBox::warning(this, tr("Warning"), tr("No capture device has been opened so capture has already been stopped!"), QMessageBox::Close);
     }
     updateCaptureTab();
 }

@@ -25,7 +25,8 @@ void MainWorker::doWork()
 
         // QThread::msleep(500);
 
-        capManager->captureFrame();
+        if(!capManager->captureFrame())
+            continue;
         emit setSmallImage(capManager->getFrame());
 
         if(!capManager->flags.testFlag(CaptureManager::edgesMarked)) {

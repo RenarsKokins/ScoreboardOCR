@@ -73,7 +73,7 @@ void RecognitionManager::findNumbers(cv::Mat *img)
         {
             rect = cv::boundingRect(contour);
             // filter out non-numbers (numbers are usually taller than size of width + not super small)
-            if((rect.height < rect.width) || (rect.height < noiseIgnoreSize) || (rect.height < (qRect.width() * noiseIgnoreRatio)))
+            if((rect.height < rect.width) || (rect.height < noiseIgnoreSize) || (rect.height < (qRect.height() * noiseIgnoreRatio)))
                 continue;
             number = cv::Mat(croppedImg, rect).clone();
 

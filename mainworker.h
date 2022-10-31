@@ -16,6 +16,8 @@ public:
     void addCaptureManager(CaptureManager *);
     void addRecognitionManager(RecognitionManager *);
 
+    int fps = 15;                   // Framerate for woker thread (how often gets called)
+
 public slots:
     void doWork();                  // Run an endless loop which does image capture, detection, filters, etc.
 
