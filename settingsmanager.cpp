@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <QVector>
+#include "settingsdialog.h"
 #include "settingsmanager.h"
 
 SettingsManager::SettingsManager()
@@ -17,6 +18,25 @@ SettingsManager::~SettingsManager()
 void SettingsManager::addRecognitionManager(RecognitionManager *rec)
 {
     recManager = rec;
+}
+
+void SettingsManager::showSettingsDialog(QWidget *parent)
+{
+    SettingsDialog dialog(parent);
+    dialog.addRecognitionManager(recManager);
+    dialog.updateFieldsWithValues();
+
+    bool applied = 0;
+    applied = dialog.exec();
+    if(!applied)
+        return;
+
+    recManager->svmPath = dialog.getPath();
+    recManager->svmSize = dialog.getSvmSize();
+    recManager->noiseIgnoreSize = dialog.getNoiseIgnoreSize();
+    recManager->noiseIgnoreRatio = dialog.getNoiseIgnoreRatio();
+
+    saveSettings();
 }
 
 void SettingsManager::loadSettings()
@@ -77,9 +97,9 @@ void SettingsManager::saveSettings()
     }
 
     // RecognitionManager
-    fout << "svmPath," << recManager->svmPath.toStdString();
-    fout << "svmSize," << recManager->svmSize;
-    fout << "noiseIgnoreSize," << recManager->noiseIgnoreSize;
-    fout << "noiseIgnoreratio," << recManager->noiseIgnoreRatio;
+    fout << "svmPath," << recManager->svmPath.toStdString() << std::endl;
+    fout << "svmSize," << recManager->svmSize << std::endl;
+    fout << "noiseIgnoreSize," << recManager->noiseIgnoreSize << std::endl;
+    fout << "noiseIgnoreratio," << recManager->noiseIgnoreRatio << std::endl;
     fout.close();
 }

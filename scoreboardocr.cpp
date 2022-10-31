@@ -308,5 +308,5 @@ void ScoreboardOCR::updateSelectionCoordinates(QRect rect)
 
 void ScoreboardOCR::openSettings()
 {
-    qDebug() << "I eat boogers";
+    settingsManager->showSettingsDialog(this);
 }
