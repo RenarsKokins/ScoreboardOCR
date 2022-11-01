@@ -15,14 +15,6 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     capManager = new CaptureManager();
     recManager = new RecognitionManager();
 
-    // Load settings
-    settingsManager = new SettingsManager();
-    settingsManager->addRecognitionManager(recManager);
-    settingsManager->loadSettings();
-
-    // Initialize SVM
-    recManager->loadSVM();
-
     // Initialize UI
     ui->setupUi(this);
     smallGraphicsScene = new CaptureScene(this);
@@ -61,6 +53,15 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
 
     connect(ui->addSelectionButton, SIGNAL(released()), this, SLOT(addSelection()));                // Add selection button pressed
     connect(ui->deleteSelectionButton, SIGNAL(released()), this, SLOT(deleteSelection()));          // Delete selection button pressed
+
+    // Load settings
+    settingsManager = new SettingsManager();
+    settingsManager->addMainWorker(mainWorker);
+    settingsManager->addRecognitionManager(recManager);
+    settingsManager->loadSettings();
+
+    // Initialize SVM
+    recManager->loadSVM();
 }
 
 ScoreboardOCR::~ScoreboardOCR()

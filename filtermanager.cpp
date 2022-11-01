@@ -40,7 +40,9 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
     cv::Mat M = cv::getPerspectiveTransform(src, dst);
     cv::Size dsize = cv::Size(image->cols, image->rows);
     cv::warpPerspective(*image, img, M, dsize);  // Warp image
-    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);  // Convert image to grayscale
+
+    if(img.channels() > 1)
+        cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);  // Convert image to grayscale
 
     if(blur != 0)
         cv::blur(img, img, cv::Size(blur, blur));   // Blur image

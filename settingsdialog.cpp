@@ -9,6 +9,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->pathSelectButton, SIGNAL(released()), this, SLOT(showFileExplorerAndUpdatePath()));
+    connect(ui->saveButton, SIGNAL(released()), this, SLOT(doSave()));
 }
 
 void SettingsDialog::updateFieldsWithValues()
@@ -17,11 +18,17 @@ void SettingsDialog::updateFieldsWithValues()
     ui->svmSizeSpinbox->setValue(recManager->svmSize);
     ui->noiseIgnoreSizeSpinbox->setValue(recManager->noiseIgnoreSize);
     ui->noiseIgnoreRatioSpinbox->setValue(recManager->noiseIgnoreRatio);
+    ui->fpsSpinbox->setValue(worker->fps);
 }
 
 void SettingsDialog::addRecognitionManager(RecognitionManager *rec)
 {
     recManager = rec;
+}
+
+void SettingsDialog::addMainWorker(MainWorker *m)
+{
+    worker = m;
 }
 
 void SettingsDialog::showFileExplorerAndUpdatePath()
@@ -54,4 +61,14 @@ int SettingsDialog::getNoiseIgnoreSize()
 float SettingsDialog::getNoiseIgnoreRatio()
 {
    return ui->noiseIgnoreRatioSpinbox->value();
+}
+
+int SettingsDialog::getFps()
+{
+    return ui->fpsSpinbox->value();
+}
+
+void SettingsDialog::doSave()
+{
+    emit emitSave(this);
 }
