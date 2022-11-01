@@ -12,35 +12,35 @@ INCLUDEPATH += /usr/include/opencv4
 LIBS += `pkg-config --cflags --libs opencv4`
 
 SOURCES += \
-    capturemanager.cpp \
-    capturescene.cpp \
-    filtermanager.cpp \
-    main.cpp \
-    maincapturescene.cpp \
-    mainworker.cpp \
-    recognitionmanager.cpp \
-    scoreboardocr.cpp \
-    selection.cpp \
-    selectiondialog.cpp \
-    selectiontype.cpp \
-    selectionwidget.cpp \
-    settingsdialog.cpp \
-    settingsmanager.cpp
+    src/capturemanager.cpp \
+    src/capturescene.cpp \
+    src/filtermanager.cpp \
+    src/main.cpp \
+    src/maincapturescene.cpp \
+    src/mainworker.cpp \
+    src/recognitionmanager.cpp \
+    src/scoreboardocr.cpp \
+    src/selection.cpp \
+    src/selectiondialog.cpp \
+    src/selectiontype.cpp \
+    src/selectionwidget.cpp \
+    src/settingsdialog.cpp \
+    src/settingsmanager.cpp
 
 HEADERS += \
-    capturemanager.h \
-    capturescene.h \
-    filtermanager.h \
-    maincapturescene.h \
-    mainworker.h \
-    recognitionmanager.h \
-    scoreboardocr.h \
-    selection.h \
-    selectiondialog.h \
-    selectiontype.h \
-    selectionwidget.h \
-    settingsdialog.h \
-    settingsmanager.h
+    src/capturemanager.h \
+    src/capturescene.h \
+    src/filtermanager.h \
+    src/maincapturescene.h \
+    src/mainworker.h \
+    src/recognitionmanager.h \
+    src/scoreboardocr.h \
+    src/selection.h \
+    src/selectiondialog.h \
+    src/selectiontype.h \
+    src/selectionwidget.h \
+    src/settingsdialog.h \
+    src/settingsmanager.h
 
 FORMS += \
     scoreboardocr.ui \
