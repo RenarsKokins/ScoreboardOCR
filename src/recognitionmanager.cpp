@@ -1,4 +1,6 @@
 #include <QDebug>
+#include <chrono>
+#include <opencv2/imgcodecs.hpp>
 #include "recognitionmanager.h"
 
 RecognitionManager::RecognitionManager()
@@ -63,10 +65,12 @@ void RecognitionManager::findNumbers(cv::Mat *img)
     for(Selection &selection : selections)
     {
         qRect = selection.getSelectionPos();
+        if(qRect.x() < 5 || qRect.y() < 5)
+            continue;
         selection.clearNumbers();
         croppedImg = cv::Mat(*img, cv::Rect(qRect.x(),
                                             qRect.y(),
-                                            qRect.width(),
+                                            abs(qRect.width()),
                                             qRect.height()));
         cv::findContours(croppedImg, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
         for(std::vector<cv::Point> &contour : contours)
@@ -97,6 +101,22 @@ void RecognitionManager::findNumbers(cv::Mat *img)
             }
             cv::copyMakeBorder(number, number, 0, 0, left, right, cv::BORDER_CONSTANT, cv::Scalar(0,0,0));
             selection.addNumber(number);
+        }
+    }
+
+    if(flags.testFlag(RecognitionManager::saveNumbers))
+        saveNumbersAsFiles(imgSavePath);
+}
+
+void RecognitionManager::saveNumbersAsFiles(QString path)
+{
+
+    for(Selection &selection : selections)
+    {
+        for(cv::Mat &img : *selection.getNumbers())
+        {
+            uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            cv::imwrite(path.toStdString() + QString::number(ms).toStdString() + ".png", img);
         }
     }
 }

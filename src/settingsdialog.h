@@ -23,6 +23,7 @@ public:
     int getFps();
     int getSvmSize();
     QString getPath();
+    bool getSaveNumbers();
     int getNoiseIgnoreSize();
     float getNoiseIgnoreRatio();
 

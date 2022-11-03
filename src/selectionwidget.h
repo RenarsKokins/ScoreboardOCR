@@ -2,7 +2,7 @@
 #define SELECTIONWIDGET_H
 
 #include <QWidget>
-#include <selection.h>
+#include "selection.h"
 
 namespace Ui {
 class SelectionWidget;

@@ -18,6 +18,7 @@ void SettingsDialog::updateFieldsWithValues()
     ui->svmSizeSpinbox->setValue(recManager->svmSize);
     ui->noiseIgnoreSizeSpinbox->setValue(recManager->noiseIgnoreSize);
     ui->noiseIgnoreRatioSpinbox->setValue(recManager->noiseIgnoreRatio);
+    ui->saveImagesCheckbox->setChecked(recManager->flags.testFlag(RecognitionManager::saveNumbers));
     ui->fpsSpinbox->setValue(worker->fps);
 }
 
@@ -71,4 +72,9 @@ int SettingsDialog::getFps()
 void SettingsDialog::doSave()
 {
     emit emitSave(this);
+}
+
+bool SettingsDialog::getSaveNumbers()
+{
+    return ui->saveImagesCheckbox->isChecked();
 }

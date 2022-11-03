@@ -129,7 +129,7 @@ void MainCaptureScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
     if(recManager->flags.testFlag(RecognitionManager::selectingSelection))
     {
-        emit updateSelectionCoordinates(selectionBoxes.last()->rect().toRect());
+        emit updateSelectionCoordinates(selectionBoxes.last()->rect().toRect().normalized());
         recManager->flags.setFlag(RecognitionManager::selectingSelection, false);
     }
 }
