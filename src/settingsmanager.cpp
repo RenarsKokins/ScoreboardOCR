@@ -31,6 +31,7 @@ void SettingsManager::updateSettings(SettingsDialog *dialog)
     recManager->noiseIgnoreSize = dialog->getNoiseIgnoreSize();
     recManager->noiseIgnoreRatio = dialog->getNoiseIgnoreRatio();
     recManager->flags.setFlag(RecognitionManager::saveNumbers, dialog->getSaveNumbers());
+    recManager->loadSVM();
     worker->fps = dialog->getFps();
 }
 

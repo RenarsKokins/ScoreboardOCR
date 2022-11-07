@@ -44,7 +44,7 @@ public:
     QString imgSavePath = "images/";// A path where to save iamges
 
 private:
-    cv::ml::SVM *svm;               // Pointer to our source vector machine (created in constructor)
+    cv::Ptr<cv::ml::SVM> svm;       // Pointer to our source vector machine (created in constructor)
     QList<Selection> selections;
 };
 

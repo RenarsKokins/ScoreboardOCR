@@ -110,7 +110,6 @@ void RecognitionManager::findNumbers(cv::Mat *img)
 
 void RecognitionManager::saveNumbersAsFiles(QString path)
 {
-
     for(Selection &selection : selections)
     {
         for(cv::Mat &img : *selection.getNumbers())
@@ -128,12 +127,19 @@ bool RecognitionManager::selectionsAdded()
 
 void RecognitionManager::recognizeNumbers()
 {
+    QRect qRect;
+
     for(Selection &selection : selections)
     {
+        qRect = selection.getSelectionPos();
+        if(qRect.x() < 5 || qRect.y() < 5)
+            continue;
         selection.clearRawRecognitionNumbers();
         for(cv::Mat &number : *selection.getNumbers())
         {
-            float response = svm->predict(number);
+            cv::Mat data = number.clone().reshape(0, 1);
+            data.convertTo(data, CV_32F);
+            float response = svm->predict(data);
             selection.addRawRecognitionNumber(response);
         }
     }
@@ -142,10 +148,17 @@ void RecognitionManager::recognizeNumbers()
 void RecognitionManager::loadSVM()
 {
     try {
-        svm->load(svmPath.toStdString());
+        svm = cv::ml::SVM::load(svmPath.toStdString());
+        qDebug() << "Loaded svm:" << svmPath;
+        qDebug() << "SVM var count:" << svm->getVarCount();
         flags.setFlag(RecognitionManager::svmLoaded, true);
     } catch (...) {
         qDebug() << "Couldn't load svm!";
+        flags.setFlag(RecognitionManager::svmLoaded, false);
+    }
+    if(svm->getVarCount() != svmSize*svmSize)
+    {
+        qDebug() << "Loaded SVM image size does not match current SVM size set in this application! Disabling SVM...";
         flags.setFlag(RecognitionManager::svmLoaded, false);
     }
 }

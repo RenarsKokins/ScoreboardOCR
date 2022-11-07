@@ -51,7 +51,7 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
     // Apply fill gaps (it is just dialate and erode together)
     if(fillGaps != 0)
     {
-        cv::Mat element = cv::getStructuringElement( cv::MORPH_RECT,
+        cv::Mat element = cv::getStructuringElement( cv::MORPH_ELLIPSE,
                              cv::Size( 2 * fillGaps + 1, 2 * fillGaps + 1 ),
                              cv::Point( fillGaps, fillGaps ));
         cv::dilate(img, img, element);
@@ -61,7 +61,7 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
     // Apply dialation, if necessary
     if(dialate != 0)
     {
-        cv::Mat element = cv::getStructuringElement( cv::MORPH_RECT,
+        cv::Mat element = cv::getStructuringElement( cv::MORPH_ELLIPSE,
                              cv::Size( 2 * dialate + 1, 2 * dialate + 1 ),
                              cv::Point( dialate, dialate ));
         cv::dilate(img, img, element);
@@ -70,7 +70,7 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
     // Apply erode, if necessary
     if(erode != 0)
     {
-        cv::Mat element = cv::getStructuringElement( cv::MORPH_RECT,
+        cv::Mat element = cv::getStructuringElement( cv::MORPH_ELLIPSE,
                              cv::Size( 2 * erode + 1, 2 * erode + 1 ),
                              cv::Point( erode, erode ));
         cv::erode(img, img, element);

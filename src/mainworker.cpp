@@ -48,6 +48,8 @@ void MainWorker::doWork()
         if(!recManager->selectionsAdded())
             continue;
         recManager->findNumbers(filManager->getImageWithFilters());
+        if(recManager->flags.testFlag(RecognitionManager::svmLoaded) && !recManager->flags.testFlag(RecognitionManager::saveNumbers))
+            recManager->recognizeNumbers();
         lastTime = std::chrono::steady_clock::now();
     }
 }
