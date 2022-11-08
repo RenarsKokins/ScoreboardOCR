@@ -9,6 +9,7 @@
 #include "mainworker.h"
 #include "capturescene.h"
 #include "filtermanager.h"
+#include "outputmanager.h"
 #include "capturemanager.h"
 #include "settingsmanager.h"
 #include "maincapturescene.h"
@@ -33,10 +34,12 @@ public slots:
     void addSelection();                // Display selection dialog
     void changeGaps(int);               // Change threshold value in FilterManager
     void changeBlur(int);               // Change blur value in FilterManager
+    void setOutputPath();               // Let user choose a path and save it
     void changeErode(int);              // Change erode value in FilterManager
     void changeItalic(int);             // Change italic value in FilterManager
     void deleteSelection();             // Delete currently selected selection
     void changeDialate(int);            // Change dialate value in FilterManager
+    void setOutputFilename();           // Set output filename from lineedit
     void changeThreshold(int);          // Change threshold value in FilterManager
     void setCurrentDevice(int val);     // Combobox device select slot
     void updateEdges(QList<QPoint>);    // Update edges for image transformation
@@ -52,6 +55,7 @@ private:
     QThread workerThread;               // Place where MainWorker operates
     MainWorker *mainWorker;             // Thread where all processes happen (capture, filters, etc.)
     FilterManager *filManager;          // Filter manager (applies transforms, thresholds, etc.)
+    OutputManager *outManager;          // Pointer to output manager
     CaptureManager *capManager;         // Main capture manager
     RecognitionManager *recManager;     // Recognition manager (detects numbers, defines boxes, etc.)
     SettingsManager *settingsManager;   // Settings manager

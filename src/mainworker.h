@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "filtermanager.h"
+#include "outputmanager.h"
 #include "capturemanager.h"
 #include "recognitionmanager.h"
 
@@ -13,6 +14,7 @@ public:
     MainWorker();
     ~MainWorker();
     void addFilterManager(FilterManager *);
+    void addOutputManager(OutputManager *);
     void addCaptureManager(CaptureManager *);
     void addRecognitionManager(RecognitionManager *);
 
@@ -27,6 +29,7 @@ signals:
 
 private:
     FilterManager *filManager;      // Pointer to FilterManager
+    OutputManager *outManager;      // Pointer to OutputManager
     CaptureManager *capManager;     // Pointer to CaptureManager
     RecognitionManager *recManager; // Pointer to RecognitionManager
 };

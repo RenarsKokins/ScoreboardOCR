@@ -18,6 +18,7 @@ SOURCES += \
     src/main.cpp \
     src/maincapturescene.cpp \
     src/mainworker.cpp \
+    src/outputmanager.cpp \
     src/recognitionmanager.cpp \
     src/scoreboardocr.cpp \
     src/selection.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     src/filtermanager.h \
     src/maincapturescene.h \
     src/mainworker.h \
+    src/outputmanager.h \
     src/recognitionmanager.h \
     src/scoreboardocr.h \
     src/selection.h \

@@ -68,3 +68,8 @@ void MainWorker::addRecognitionManager(RecognitionManager *rec)
 {
     recManager = rec;
 }
+
+void MainWorker::addOutputManager(OutputManager *out)
+{
+    outManager = out;
+}

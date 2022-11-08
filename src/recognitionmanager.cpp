@@ -168,6 +168,7 @@ void RecognitionManager::loadSVM()
     } catch (...) {
         qDebug() << "Couldn't load svm!";
         flags.setFlag(RecognitionManager::svmLoaded, false);
+        return;
     }
     if(svm->getVarCount() != svmSize*svmSize)
     {

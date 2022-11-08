@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <QListWidgetItem>
 #include "scoreboardocr.h"
 #include "selectionwidget.h"
@@ -12,6 +13,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
 {
     // Initialize managers
     filManager = new FilterManager();
+    outManager = new OutputManager();
     capManager = new CaptureManager();
     recManager = new RecognitionManager();
 
@@ -28,6 +30,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     mainWorker = new MainWorker();
     mainWorker->moveToThread(&workerThread);
     mainWorker->addFilterManager(filManager);
+    mainWorker->addOutputManager(outManager);
     mainWorker->addCaptureManager(capManager);
     mainWorker->addRecognitionManager(recManager);
     connect(this, SIGNAL(startMainWorker()), mainWorker, SLOT(doWork()));
@@ -54,6 +57,8 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(ui->addSelectionButton, SIGNAL(released()), this, SLOT(addSelection()));                // Add selection button pressed
     connect(ui->deleteSelectionButton, SIGNAL(released()), this, SLOT(deleteSelection()));          // Delete selection button pressed
 
+    connect(ui->outputPathButton, SIGNAL(released()), this, SLOT(setOutputPath()));                 // Ask user for path where to save outout
+    connect(ui->outputNameLineEdit, SIGNAL(editingFinished()), this, SLOT(setOutputFilename()));    // Set output file name
     // Load settings
     settingsManager = new SettingsManager();
     settingsManager->addMainWorker(mainWorker);
@@ -310,4 +315,21 @@ void ScoreboardOCR::updateSelectionCoordinates(QRect rect)
 void ScoreboardOCR::openSettings()
 {
     settingsManager->showSettingsDialog(this);
+}
+
+void ScoreboardOCR::setOutputPath()
+{
+    QString path = QFileDialog::getExistingDirectory(this, tr("Path where to save output"), ".", QFileDialog::ShowDirsOnly);
+    if(path.isEmpty())
+        return;
+    outManager->setOutputPath(path);
+    ui->outputPathLineEdit->setText(outManager->getOutputPath());
+}
+
+void ScoreboardOCR::setOutputFilename()
+{
+    QString name = ui->outputNameLineEdit->text();
+    if(name.isEmpty())
+        return;
+    outManager->setOutputFilename(name);
 }
