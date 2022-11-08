@@ -46,6 +46,8 @@ public:
 private:
     cv::Ptr<cv::ml::SVM> svm;       // Pointer to our source vector machine (created in constructor)
     QList<Selection> selections;
+
+    static bool compareRect(const cv::Rect &, const cv::Rect &);   // Compare two rects so that we can sort them
 };
 
 #endif // RECOGNITIONMANAGER_H

@@ -48,14 +48,13 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
         cv::blur(img, img, cv::Size(blur, blur));   // Blur image
     cv::threshold(img, img, threshold, 255, 0);     // Apply threshold
 
-    // Apply fill gaps (it is just dialate and erode together)
+    // Apply fill vetical gaps (it is just dialate and erode together with vertical kernel)
     if(fillGaps != 0)
     {
         cv::Mat element = cv::getStructuringElement( cv::MORPH_ELLIPSE,
-                             cv::Size( 2 * fillGaps + 1, 2 * fillGaps + 1 ),
-                             cv::Point( fillGaps, fillGaps ));
-        cv::dilate(img, img, element);
-        cv::erode(img, img, element);
+                             cv::Size(1, 2 * fillGaps + 1 ));
+        cv::dilate(img, img, element, cv::Point(-1, -1));
+        cv::erode(img, img, element, cv::Point(-1, -1));
     }
 
     // Apply dialation, if necessary

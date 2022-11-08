@@ -53,12 +53,17 @@ void RecognitionManager::updateSelectionCoordinates(QRect rect)
     flags.setFlag(RecognitionManager::selectingSelection, false);
 }
 
+bool RecognitionManager::compareRect(const cv::Rect &a, const cv::Rect &b)
+{
+    return a.x < b.x;
+}
+
 void RecognitionManager::findNumbers(cv::Mat *img)
 {
     QRect qRect;
-    cv::Rect rect;
     cv::Mat number;
     cv::Mat croppedImg;
+    std::vector<cv::Rect> rects;
     std::vector<cv::Vec4i> hierarchy;
     std::vector<std::vector<cv::Point>> contours;
 
@@ -67,6 +72,7 @@ void RecognitionManager::findNumbers(cv::Mat *img)
         qRect = selection.getSelectionPos();
         if(qRect.x() < 5 || qRect.y() < 5)
             continue;
+        rects.clear();
         selection.clearNumbers();
         croppedImg = cv::Mat(*img, cv::Rect(qRect.x(),
                                             qRect.y(),
@@ -75,10 +81,17 @@ void RecognitionManager::findNumbers(cv::Mat *img)
         cv::findContours(croppedImg, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
         for(std::vector<cv::Point> &contour : contours)
         {
-            rect = cv::boundingRect(contour);
+            cv::Rect rect = cv::boundingRect(contour);
             // filter out non-numbers (numbers are usually taller than size of width + not super small)
             if((rect.height < rect.width) || (rect.height < noiseIgnoreSize) || (rect.height < (qRect.height() * noiseIgnoreRatio)))
                 continue;
+            rects.push_back(rect);
+        }
+
+        std::sort(rects.begin(), rects.end(), compareRect);
+
+        for(cv::Rect &rect : rects)
+        {
             number = cv::Mat(croppedImg, rect).clone();
 
             // Scale image so it has a height of svmSize, but width proportional to original bounding rect.
