@@ -41,6 +41,7 @@ public slots:
     void changeDialate(int);            // Change dialate value in FilterManager
     void setOutputFilename();           // Set output filename from lineedit
     void changeThreshold(int);          // Change threshold value in FilterManager
+    void setOutputFormat(int);          // Set output format
     void setCurrentDevice(int val);     // Combobox device select slot
     void updateEdges(QList<QPoint>);    // Update edges for image transformation
     void displayMainImage(cv::Mat *);   // Display main image in GUI
@@ -63,6 +64,7 @@ private:
     MainCaptureScene *mainGraphicsScene;// Main graphics scene
 
     // UI updates
+    void updateOutputTab();
     void updateCaptureTab();
     int updateDeviceDropdown();
     void updateRecognitionTab();

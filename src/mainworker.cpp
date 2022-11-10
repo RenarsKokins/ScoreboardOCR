@@ -34,22 +34,30 @@ void MainWorker::doWork()
         }
         lastTime = std::chrono::steady_clock::now();
 
+        // Check if we can get image, update small scene
         if(!capManager->captureFrame())
             continue;
         emit setSmallImage(capManager->getFrame());
 
+        // Show main image without filters if edges haven't been marked
         if(!capManager->flags.testFlag(CaptureManager::edgesMarked)) {
             emit setMainImage(capManager->getFrame());
             continue;
         }
+        // Apply filters and set main image to it
         filManager->createImageWithFilters(capManager->getFrame(), *capManager->getEdges());
         emit setMainImage(filManager->getImageWithFilters());
 
+        // Do number detection and recognition
         if(!recManager->selectionsAdded())
             continue;
         recManager->findNumbers(filManager->getImageWithFilters());
         if(recManager->flags.testFlag(RecognitionManager::svmLoaded) && !recManager->flags.testFlag(RecognitionManager::saveNumbers))
             recManager->recognizeNumbers();
+
+        // Save recognized numbers to a file
+        outManager->saveRecognizedNumbers();
+
         lastTime = std::chrono::steady_clock::now();
     }
 }

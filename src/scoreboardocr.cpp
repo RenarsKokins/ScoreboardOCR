@@ -17,6 +17,8 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     capManager = new CaptureManager();
     recManager = new RecognitionManager();
 
+    outManager->addSelections(recManager->getSelections());
+
     // Initialize UI
     ui->setupUi(this);
     smallGraphicsScene = new CaptureScene(this);
@@ -37,9 +39,6 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(mainWorker, SIGNAL(setMainImage(cv::Mat*)), this, SLOT(displayMainImage(cv::Mat*)));
     connect(mainWorker, SIGNAL(setSmallImage(cv::Mat*)), this, SLOT(displaySmallImage(cv::Mat*)));
 
-    // Update device combobox
-    updateDeviceDropdown();
-
     // Connect UI signals/slots
     connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(openSettings()));
 
@@ -57,8 +56,10 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(ui->addSelectionButton, SIGNAL(released()), this, SLOT(addSelection()));                // Add selection button pressed
     connect(ui->deleteSelectionButton, SIGNAL(released()), this, SLOT(deleteSelection()));          // Delete selection button pressed
 
-    connect(ui->outputPathButton, SIGNAL(released()), this, SLOT(setOutputPath()));                 // Ask user for path where to save outout
-    connect(ui->outputNameLineEdit, SIGNAL(editingFinished()), this, SLOT(setOutputFilename()));    // Set output file name
+    connect(ui->outputPathButton, SIGNAL(released()), this, SLOT(setOutputPath()));                         // Ask user for path where to save outout
+    connect(ui->outputNameLineEdit, SIGNAL(editingFinished()), this, SLOT(setOutputFilename()));            // Set output file name
+    connect(ui->outputFormatComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setOutputFormat(int)));  // Set output format
+
     // Load settings
     settingsManager = new SettingsManager();
     settingsManager->addMainWorker(mainWorker);
@@ -67,6 +68,12 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
 
     // Initialize SVM
     recManager->loadSVM();
+
+    // Update device combobox
+    updateDeviceDropdown();
+
+    // Update UI with values
+    updateOutputTab();
 }
 
 ScoreboardOCR::~ScoreboardOCR()
@@ -296,7 +303,7 @@ void ScoreboardOCR::deleteSelection()
         QMessageBox::warning(this, tr("Warning"), tr("Choose a selection to be deleted!"), QMessageBox::Ok);
         return;
     }
-    int i = ui->recognitionListWidget->currentRow();    // Save index of current selection
+    int i = ui->recognitionListWidget->currentRow();        // Save index of current selection
     SelectionWidget *selWid = static_cast<SelectionWidget *>(ui->recognitionListWidget->itemWidget(selection));    // Get SelectionWidget pointer
     recManager->deleteSelection(selWid->getSelection());    // Remove selection from RecognitionManager
     ui->recognitionListWidget->removeItemWidget(selection); // Remove selection from widget list
@@ -332,4 +339,17 @@ void ScoreboardOCR::setOutputFilename()
     if(name.isEmpty())
         return;
     outManager->setOutputFilename(name);
+}
+
+void ScoreboardOCR::setOutputFormat(int i)
+{
+    outManager->setOutputFormat(static_cast<OutputManager::OutputFormat>(i));
+}
+
+void ScoreboardOCR::updateOutputTab()
+{
+    if(ui->outputFormatComboBox->count() == 0)
+        ui->outputFormatComboBox->addItems(outManager->getFormatDescriptions());
+    ui->outputNameLineEdit->setText(outManager->getOutputFilename());
+    ui->outputPathLineEdit->setText(outManager->getOutputPath());
 }

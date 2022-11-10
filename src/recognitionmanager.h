@@ -32,6 +32,7 @@ public:
     void recognizeNumbers();                            // Recognizes (using SVM) numbers in image
     void findNumbers(cv::Mat *);                        // Uses defined selections to find numbers in image
     void saveNumbersAsFiles(QString);                   // Save recognized numbers for debug/training purposes
+    QList<Selection> *getSelections();                  // Return a pointer to selections
     void deleteSelection(Selection *);
     void deleteSelection(unsigned short);
     void updateSelectionCoordinates(QRect);

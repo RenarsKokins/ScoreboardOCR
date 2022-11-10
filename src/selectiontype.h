@@ -33,7 +33,7 @@ private:
         "Time (mm:ss.ms)",
         "Period (1st, 2nd, 3rd, 4th, OT)",
         "Custom period (1st, 2nd, ..., 9th)",
-        "24 second clock (ss.ms)",
+        "24 second clock with milliseconds (ss.ms)",
         "24, 30 or 45 second clock (ss)",
         "Unformatted number",
     };

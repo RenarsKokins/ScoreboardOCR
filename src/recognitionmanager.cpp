@@ -176,3 +176,8 @@ void RecognitionManager::loadSVM()
         flags.setFlag(RecognitionManager::svmLoaded, false);
     }
 }
+
+QList<Selection> *RecognitionManager::getSelections()
+{
+    return &selections;
+}
