@@ -42,7 +42,13 @@ private:
         "Multiple text files (.txt)",
     };
 
-    QString serializeRawNumbers(QVector<int>, SelectionType);
+    void saveNumbersToFile(QStringList, QStringList);               // Save serialized string to file
+    QString serializeRawNumbers(QVector<int>, SelectionType);       // Convert raw numbers to serialized string based on type
+
+    void saveAsCSV(QStringList, QStringList);
+    void saveAsXML(QStringList, QStringList);
+    void saveAsJSON(QStringList, QStringList);
+    void saveAsText(QStringList, QStringList);
 };
 
 #endif // OUTPUTMANAGER_H

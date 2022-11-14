@@ -1,4 +1,9 @@
+#include <QFile>
 #include <QDebug>
+#include <fstream>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QXmlStreamWriter>
 #include "outputmanager.h"
 
 OutputManager::OutputManager()
@@ -48,12 +53,114 @@ void OutputManager::addSelections(QList<Selection> *sel)
 
 void OutputManager::saveRecognizedNumbers()
 {
-    QString serializedNumbers;
+    QStringList selectionNames;
+    QStringList serializedNumbers;
     for(Selection &selection : *selections)
     {
-        serializedNumbers = serializeRawNumbers(*selection.getRawRecognitionNumbers(),
+        QString serializedNumber = serializeRawNumbers(*selection.getRawRecognitionNumbers(),
                                                 selection.getType());
-        qDebug() << serializedNumbers;
+        qDebug() << serializedNumber;
+        serializedNumbers.push_back(serializedNumber);
+        selectionNames.push_back(selection.getName());
+    }
+    saveNumbersToFile(serializedNumbers, selectionNames);
+}
+
+void OutputManager::saveNumbersToFile(QStringList serializedNumbers, QStringList selectionNames)
+{
+    switch(format)
+    {
+    case OutputFormat::CSV:
+        OutputManager::saveAsCSV(serializedNumbers, selectionNames);
+        break;
+    case OutputFormat::XML:
+        OutputManager::saveAsXML(serializedNumbers, selectionNames);
+        break;
+    case OutputFormat::TEXT:
+        OutputManager::saveAsText(serializedNumbers, selectionNames);
+        break;
+    case OutputFormat::JSON:
+        OutputManager::saveAsJSON(serializedNumbers, selectionNames);
+        break;
+    }
+}
+
+void OutputManager::saveAsCSV(QStringList serializedNumbers, QStringList selectionNames)
+{
+    QString fullPath = outputPath + '/' + outputFilename + ".csv";
+    std::ofstream fout;
+    fout.open(fullPath.toStdString());
+    if(!fout.is_open())
+    {
+        qDebug() << "Output file" << fullPath << "could not be open!";
+        return;
+    }
+
+    for(int i = 0; i < serializedNumbers.count(); i++)
+    {
+        fout << selectionNames[i].toStdString() << "," << serializedNumbers[i].toStdString() << std::endl;
+    }
+    fout.close();
+}
+
+void OutputManager::saveAsXML(QStringList serializedNumbers, QStringList selectionNames)
+{
+    QString fullPath = outputPath + '/' + outputFilename + ".xml";
+    QFile fout(fullPath);
+    fout.open(QIODevice::WriteOnly);
+    if(!fout.isOpen())
+    {
+        qDebug() << "Output file" << fullPath << "could not be open!";
+        return;
+    }
+
+    QXmlStreamWriter stream(&fout);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("OCR");
+    for(int i = 0; i < serializedNumbers.count(); i++)
+    {
+        stream.writeTextElement(selectionNames[i], serializedNumbers[i]);
+    }
+    stream.writeEndDocument();
+
+    fout.close();
+}
+
+void OutputManager::saveAsJSON(QStringList serializedNumbers, QStringList selectionNames)
+{
+    QJsonObject object;
+    for(int i = 0; i < serializedNumbers.count(); i++)
+    {
+        object.insert(selectionNames[i], serializedNumbers[i]);
+    }
+
+    QString fullPath = outputPath + '/' + outputFilename + ".json";
+    QFile fout(fullPath);
+    fout.open(QIODevice::WriteOnly);
+    if(!fout.isOpen())
+    {
+        qDebug() << "Output file" << fullPath << "could not be open!";
+        return;
+    }
+    QJsonDocument stream(object);
+    fout.write(stream.toJson());
+    fout.close();
+}
+
+void OutputManager::saveAsText(QStringList serializedNumbers, QStringList selectionNames)
+{
+    std::ofstream fout;
+    for(int i = 0; i < serializedNumbers.count(); i++)
+    {
+        fout.open(outputPath.toStdString() + '/' + selectionNames[i].toStdString() + ".txt");
+        if(!fout.is_open())
+        {
+            qDebug() << "Output file (.txt) could not be open!";
+            continue;
+        }
+        fout << serializedNumbers[i].toStdString() << std::endl;
+        fout.close();
     }
 }
 
