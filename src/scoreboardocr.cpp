@@ -21,6 +21,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
 
     // Initialize UI
     ui->setupUi(this);
+    addFormatsToOutputTab();
     smallGraphicsScene = new CaptureScene(this);
     mainGraphicsScene = new MainCaptureScene(this, capManager, recManager);
     ui->mainImage->setScene(mainGraphicsScene);
@@ -63,6 +64,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     // Load settings
     settingsManager = new SettingsManager();
     settingsManager->addMainWorker(mainWorker);
+    settingsManager->addOutputManager(outManager);
     settingsManager->addRecognitionManager(recManager);
     settingsManager->loadSettings();
 
@@ -331,6 +333,7 @@ void ScoreboardOCR::setOutputPath()
         return;
     outManager->setOutputPath(path);
     ui->outputPathLineEdit->setText(outManager->getOutputPath());
+    settingsManager->saveSettings(nullptr);
 }
 
 void ScoreboardOCR::setOutputFilename()
@@ -339,17 +342,26 @@ void ScoreboardOCR::setOutputFilename()
     if(name.isEmpty())
         return;
     outManager->setOutputFilename(name);
+    settingsManager->saveSettings(nullptr);
 }
 
 void ScoreboardOCR::setOutputFormat(int i)
 {
     outManager->setOutputFormat(static_cast<OutputManager::OutputFormat>(i));
+    settingsManager->saveSettings(nullptr);
+}
+
+void ScoreboardOCR::addFormatsToOutputTab()
+{
+    if(ui->outputFormatComboBox->count() == 0)
+    {
+        ui->outputFormatComboBox->addItems(outManager->getFormatDescriptions());
+    }
 }
 
 void ScoreboardOCR::updateOutputTab()
 {
-    if(ui->outputFormatComboBox->count() == 0)
-        ui->outputFormatComboBox->addItems(outManager->getFormatDescriptions());
     ui->outputNameLineEdit->setText(outManager->getOutputFilename());
     ui->outputPathLineEdit->setText(outManager->getOutputPath());
+    ui->outputFormatComboBox->setCurrentIndex(outManager->getOutputFormat());
 }

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "mainworker.h"
+#include "outputmanager.h"
 #include "settingsdialog.h"
 #include "recognitionmanager.h"
 
@@ -14,17 +15,20 @@ class SettingsManager : public QObject
 public:
     SettingsManager();
     ~SettingsManager();
-    void loadSettings();                        // Load settings into manangers
-    void addMainWorker(MainWorker*);
-    void showSettingsDialog(QWidget *parent);   // Show a settings dialog which might change settings
-    void addRecognitionManager(RecognitionManager*);
+    void loadSettings();                                // Load settings into manangers
+    void addMainWorker(MainWorker *);
+    void saveSettings(SettingsDialog *);                // Save settings from managers
+    void updateSettings(SettingsDialog *);              // Update settings to managers
+    void addOutputManager(OutputManager *);
+    void showSettingsDialog(QWidget *parent);           // Show a settings dialog which might change settings
+    void addRecognitionManager(RecognitionManager *);
 
-private slots:
-    void saveSettings(SettingsDialog *);        // Save settings from managers
-    void updateSettings(SettingsDialog *);      // Update settings to managers
+public slots:
+    void doSave(SettingsDialog *);                      // Slot for calling saveSettings
 
 private:
     MainWorker *worker;
+    OutputManager *outManager;
     RecognitionManager *recManager;
     std::string configPath = "settings.csv";
 };

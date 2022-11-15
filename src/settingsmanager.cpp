@@ -19,6 +19,11 @@ void SettingsManager::addRecognitionManager(RecognitionManager *rec)
     recManager = rec;
 }
 
+void SettingsManager::addOutputManager(OutputManager *out)
+{
+    outManager = out;
+}
+
 void SettingsManager::addMainWorker(MainWorker *m)
 {
     worker = m;
@@ -41,7 +46,7 @@ void SettingsManager::showSettingsDialog(QWidget *parent)
     dialog.addMainWorker(worker);
     dialog.addRecognitionManager(recManager);
     dialog.updateFieldsWithValues();
-    connect(&dialog, SIGNAL(emitSave(SettingsDialog*)), this, SLOT(saveSettings(SettingsDialog*)));
+    connect(&dialog, SIGNAL(emitSave(SettingsDialog*)), this, SLOT(doSave(SettingsDialog*)));
 
     bool applied = 0;
     applied = dialog.exec();
@@ -94,13 +99,22 @@ void SettingsManager::loadSettings()
             recManager->noiseIgnoreRatio = std::stof(setting[1]);
         else if(setting[0] == "fps")
             worker->fps = std::stoi(setting[1]);
+        // OutputManager
+        else if(setting[0] == "outputPath")
+            outManager->setOutputPath(QString::fromUtf8(setting[1].data(), setting[1].size()));
+        else if(setting[0] == "outputFilename")
+            outManager->setOutputFilename(QString::fromUtf8(setting[1].data(), setting[1].size()));
+        else if(setting[0] == "outputFormat")
+            outManager->setOutputFormat(static_cast<OutputManager::OutputFormat>(std::stoi(setting[1])));
     }
 }
 
-void SettingsManager::saveSettings(SettingsDialog *dialog)
+void SettingsManager::saveSettings(SettingsDialog *dialog = nullptr)
 {
     std::ofstream fout;
-    updateSettings(dialog);
+
+    if(dialog != nullptr)
+        updateSettings(dialog);
 
     // Try to open config file
     fout.open(configPath);
@@ -116,5 +130,14 @@ void SettingsManager::saveSettings(SettingsDialog *dialog)
     fout << "noiseIgnoreSize," << recManager->noiseIgnoreSize << std::endl;
     fout << "noiseIgnoreratio," << recManager->noiseIgnoreRatio << std::endl;
     fout << "fps," << worker->fps << std::endl;
+    // OutputManager
+    fout << "outputPath," << outManager->getOutputPath().toStdString() << std::endl;
+    fout << "outputFilename," << outManager->getOutputFilename().toStdString() << std::endl;
+    fout << "outputFormat," << outManager->getOutputFormat() << std::endl;
     fout.close();
+}
+
+void SettingsManager::doSave(SettingsDialog *dialog)
+{
+    saveSettings(dialog);
 }

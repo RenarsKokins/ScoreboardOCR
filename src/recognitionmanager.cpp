@@ -98,6 +98,12 @@ void RecognitionManager::findNumbers(cv::Mat *img)
             // That means that if original bounding rect width is 50 and height 100, new size will be:
             // width: 12 height: 24
             int width = ((float)number.cols / number.rows) * svmSize;
+
+            // Edge case where selection width to height ratio is so small, that width would be 0.
+            // If so, set width to 1, as resize would segfault if not.
+            if(width < 1)
+                width = 1;
+
             cv::resize(number, number, cv::Size(width, svmSize), 0, 0);
             // Now we add borders to that scaled down image, so that its size will be svmSize * svmSize
             int left, right;

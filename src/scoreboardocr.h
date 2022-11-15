@@ -68,6 +68,7 @@ private:
     void updateCaptureTab();
     int updateDeviceDropdown();
     void updateRecognitionTab();
+    void addFormatsToOutputTab();
     void closeEvent(QCloseEvent *) override;
     void resizeEvent(QResizeEvent *) override;
 };

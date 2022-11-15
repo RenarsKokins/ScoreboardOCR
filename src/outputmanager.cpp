@@ -59,7 +59,6 @@ void OutputManager::saveRecognizedNumbers()
     {
         QString serializedNumber = serializeRawNumbers(*selection.getRawRecognitionNumbers(),
                                                 selection.getType());
-        qDebug() << serializedNumber;
         serializedNumbers.push_back(serializedNumber);
         selectionNames.push_back(selection.getName());
     }
@@ -180,34 +179,23 @@ QString OutputManager::serializeRawNumbers(QVector<int> numbers, SelectionType t
         break;
 
     case SelectionType::longPeriod:
-        switch(numbers[0])
+        for(int &number : numbers)
+        {
+            serialized.append(QString::number(number));
+        }
+        switch(numbers[numbers.count() - 1])
         {
         case 1:
-            serialized = "1st";
+            serialized.append("st");
             break;
         case 2:
-            serialized = "2nd";
+            serialized.append("nd");
             break;
         case 3:
-            serialized = "3rd";
+            serialized.append("rd");
             break;
-        case 4:
-            serialized = "4th";
-            break;
-        case 5:
-            serialized = "5th";
-            break;
-        case 6:
-            serialized = "6th";
-            break;
-        case 7:
-            serialized = "7th";
-            break;
-        case 8:
-            serialized = "8th";
-            break;
-        case 9:
-            serialized = "9th";
+        default:
+            serialized.append("th");
             break;
         }
         break;
@@ -290,8 +278,13 @@ QString OutputManager::serializeRawNumbers(QVector<int> numbers, SelectionType t
             serialized.insert(2, ".");
         else if(serialized.count() == 4)
             serialized.insert(2, ":");
-        else if(serialized.count() > 4)
+        else if(serialized.count() == 5)
             serialized.insert(serialized.count() - 2, ":");
+        else if(serialized.count() > 5)
+        {
+            serialized.insert(serialized.count() - 2, ":");
+            serialized.insert(serialized.count() - 5, ":");
+        }
         break;
     }
     return serialized;
