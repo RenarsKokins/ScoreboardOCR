@@ -10,6 +10,7 @@ win32 {
     # more correct variant, how set includepath and libs for mingw
     # add system variable: OPENCV_SDK_DIR=D:/opencv/opencv-build/install
     # read http://doc.qt.io/qt-5/qmake-variable-reference.html#libs
+    RC_ICONS += graphics/logo.ico
 
     INCLUDEPATH += $$(OPENCV_SDK_DIR)/include
 
@@ -72,5 +73,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    graphics/logo.ico \
     graphics/logo.png \
     settings.csv
