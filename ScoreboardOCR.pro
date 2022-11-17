@@ -14,12 +14,12 @@ win32 {
     INCLUDEPATH += $$(OPENCV_SDK_DIR)/include
 
     LIBS += -L$$(OPENCV_SDK_DIR)/x64/mingw/lib \
-            -libopencv_core460        \
-            -libopencv_highgui460     \
-            -libopencv_imgcodecs460   \
-            -libopencv_imgproc460     \
-            -libopencv_videoio460     \
-            -libopencv_ml460
+            -lopencv_core460        \
+            -lopencv_highgui460     \
+            -lopencv_imgcodecs460   \
+            -lopencv_imgproc460     \
+            -lopencv_videoio460     \
+            -lopencv_ml460
 }
 
 !win32 {
