@@ -1,5 +1,6 @@
 #include <QDebug>
-#include <QCameraInfo>
+#include <QCameraDevice>
+#include <QMediaDevices>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
 #include "capturemanager.h"
@@ -70,7 +71,7 @@ QList<Camera> CaptureManager::getDevices()
 void CaptureManager::updateDeviceList()
 {
     captureDevices.clear();
-    QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
+    QList<QCameraDevice> cameras = QMediaDevices::videoInputs();
     if (cameras.count() < 1)
     {
         qDebug() << "No capture devices found!";
@@ -83,8 +84,8 @@ void CaptureManager::updateDeviceList()
     Camera cam;
     for (unsigned short i = 0; i < cameras.count(); i++)
     {
-        qDebug() << "Found device:" << cameras[i].deviceName() << "|" << cameras[i].description();
-        cam.name = cameras[i].deviceName();           // Device name
+        qDebug() << "Found device:" << cameras[i].id() << "|" << cameras[i].description();
+        cam.name = cameras[i].id();                   // Device name
         cam.description = cameras[i].description();   // Device description
 #ifdef Q_OS_LINUX
         // Index for camera access on linux gets extracted from cam name

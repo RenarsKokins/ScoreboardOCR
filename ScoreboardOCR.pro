@@ -7,9 +7,27 @@ CONFIG += c++17
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-INCLUDEPATH += /usr/include/opencv4
 
-LIBS += `pkg-config --cflags --libs opencv4`
+win32 {
+    # more correct variant, how set includepath and libs for mingw
+    # add system variable: OPENCV_SDK_DIR=D:/opencv/opencv-build/install
+    # read http://doc.qt.io/qt-5/qmake-variable-reference.html#libs
+
+    INCLUDEPATH += $$(OPENCV_SDK_DIR)/include
+
+    LIBS += -L$$(OPENCV_SDK_DIR)/x64/mingw/lib \
+            -libopencv_core460        \
+            -libopencv_highgui460     \
+            -libopencv_imgcodecs460   \
+            -libopencv_imgproc460     \
+            -libopencv_videoio460     \
+            -libopencv_ml460
+}
+
+!win32 {
+    INCLUDEPATH += /usr/include/opencv4
+    LIBS += `pkg-config --cflags --libs opencv4`
+}
 
 SOURCES += \
     src/capturemanager.cpp \
