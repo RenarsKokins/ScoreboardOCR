@@ -92,7 +92,7 @@ void CaptureManager::updateDeviceList()
 
         if (cam.name.length() > 10)
         {
-            cam.index = cam.name.midRef(10).toInt();
+            cam.index = cam.name.mid(10).toInt();
         } else
         {
             cam.index = i;

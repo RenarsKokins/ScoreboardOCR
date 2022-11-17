@@ -99,7 +99,12 @@ int ScoreboardOCR::updateDeviceDropdown()
 {
     for (Camera &cam : capManager->getDevices())
     {
+        #ifndef Q_OS_UNIX
+        // Windows camera id is "ugly" so we dont show info
+        ui->captureDeviceComboBox->addItem(cam.description);
+        #else
         ui->captureDeviceComboBox->addItem(cam.name + " | " + cam.description);
+        #endif
     }
     return 1;
 }
