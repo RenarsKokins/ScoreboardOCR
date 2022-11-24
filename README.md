@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="/graphics/logo.png" />
+</p>
+
 ## About ScoreboardOCR
 
 ScoreboardOCR is a program made for sports game scoreboard recognition. That means that you can get real-time scoreboard data on your computer only using a camera which is pointed at real life scoreboard. ScoreboardOCR will recognize digits/numbers in selection which the user has specified and save them to a file ~10-15 times a second.
