@@ -14,14 +14,65 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="4">
+   <item row="5" column="0" colspan="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Noise ignore size:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="4">
     <widget class="QSpinBox" name="noiseIgnoreSizeSpinbox">
      <property name="maximum">
       <number>250</number>
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
+   <item row="4" column="4">
+    <widget class="QSpinBox" name="svmSizeSpinbox">
+     <property name="minimum">
+      <number>4</number>
+     </property>
+     <property name="maximum">
+      <number>128</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QLineEdit" name="svmPathTextbox">
+     <property name="placeholderText">
+      <string>Path to SVM file...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>SVM size:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="4">
+    <widget class="QDoubleSpinBox" name="noiseIgnoreRatioSpinbox">
+     <property name="maximum">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.100000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1" colspan="4">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
     <widget class="QPushButton" name="saveButton">
      <property name="text">
       <string>Save</string>
@@ -33,20 +84,13 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>SVM size:</string>
+      <string>FPS:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="3">
-    <widget class="QLineEdit" name="svmPathTextbox">
-     <property name="placeholderText">
-      <string>Path to SVM file...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
+   <item row="5" column="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -59,23 +103,6 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>FPS:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="4">
-    <widget class="QSpinBox" name="fpsSpinbox">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>60</number>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -83,20 +110,30 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="3">
+   <item row="8" column="0" colspan="5">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="7" column="0" colspan="3">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>Noise ingore ratio:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="4">
-    <widget class="QSpinBox" name="svmSizeSpinbox">
-     <property name="minimum">
-      <number>4</number>
-     </property>
-     <property name="maximum">
-      <number>128</number>
+   <item row="9" column="0" colspan="2">
+    <widget class="QCheckBox" name="saveImagesCheckbox">
+     <property name="text">
+      <string>Save images for labeling</string>
      </property>
     </widget>
    </item>
@@ -119,50 +156,27 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="1" colspan="4">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="3" column="4">
+    <widget class="QSpinBox" name="fpsSpinbox">
+     <property name="minimum">
+      <number>1</number>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="4">
-    <widget class="QDoubleSpinBox" name="noiseIgnoreRatioSpinbox">
      <property name="maximum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
+      <number>60</number>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="5">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QLabel" name="label_3">
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Noise ignore size:</string>
+      <string>Is SVM loaded:</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QCheckBox" name="saveImagesCheckbox">
+   <item row="2" column="4">
+    <widget class="QLabel" name="svmLoadedLabel">
      <property name="text">
-      <string>Save images for labeling</string>
+      <string>...</string>
      </property>
     </widget>
    </item>

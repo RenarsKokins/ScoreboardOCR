@@ -24,8 +24,8 @@ win32 {
 }
 
 !win32 {
-    INCLUDEPATH += /usr/include/opencv4
-    LIBS += `pkg-config --cflags --libs opencv4`
+     INCLUDEPATH += /usr/include/opencv4
+     LIBS += `pkg-config --cflags --libs opencv4`
 }
 
 SOURCES += \

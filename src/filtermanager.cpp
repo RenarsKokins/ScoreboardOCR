@@ -48,6 +48,10 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
         cv::blur(img, img, cv::Size(blur, blur));   // Blur image
     cv::threshold(img, img, threshold, 255, 0);     // Apply threshold
 
+    // Invert image colors if specified
+    if(invert)
+        cv::bitwise_not(img, img);
+
     // Apply fill vetical gaps (it is just dialate and erode together with vertical kernel)
     if(fillGaps != 0)
     {
@@ -74,6 +78,11 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
                              cv::Point( erode, erode ));
         cv::erode(img, img, element);
     }
+}
+
+void FilterManager::setInvert(bool i)
+{
+    invert = i;
 }
 
 void FilterManager::setItalic(short i)
@@ -105,4 +114,3 @@ void FilterManager::setThreshold(unsigned short i)
 {
     threshold = i;
 }
-

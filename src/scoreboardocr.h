@@ -38,6 +38,7 @@ public slots:
     void changeErode(int);              // Change erode value in FilterManager
     void changeItalic(int);             // Change italic value in FilterManager
     void deleteSelection();             // Delete currently selected selection
+    void changeInvert(bool);            // Invert colors on image (after thresholding)
     void changeDialate(int);            // Change dialate value in FilterManager
     void setOutputFilename();           // Set output filename from lineedit
     void changeThreshold(int);          // Change threshold value in FilterManager

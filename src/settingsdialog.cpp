@@ -12,6 +12,19 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->saveButton, SIGNAL(released()), this, SLOT(doSave()));
 }
 
+void SettingsDialog::updateSVMLoadedLabel()
+{
+    if(recManager->flags.testFlag(RecognitionManager::svmLoaded))
+    {
+        ui->svmLoadedLabel->setStyleSheet("QLabel { color : green; }");
+        ui->svmLoadedLabel->setText("Yes!");
+    } else
+    {
+        ui->svmLoadedLabel->setStyleSheet("QLabel { color : red; }");
+        ui->svmLoadedLabel->setText("No!");
+    }
+}
+
 void SettingsDialog::updateFieldsWithValues()
 {
     ui->svmPathTextbox->setText(recManager->svmPath);
@@ -20,6 +33,9 @@ void SettingsDialog::updateFieldsWithValues()
     ui->noiseIgnoreRatioSpinbox->setValue(recManager->noiseIgnoreRatio);
     ui->saveImagesCheckbox->setChecked(recManager->flags.testFlag(RecognitionManager::saveNumbers));
     ui->fpsSpinbox->setValue(worker->fps);
+
+    // Check if SVM is loaded
+    updateSVMLoadedLabel();
 }
 
 void SettingsDialog::addRecognitionManager(RecognitionManager *rec)

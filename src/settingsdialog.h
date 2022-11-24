@@ -16,6 +16,7 @@ class SettingsDialog : public QDialog
 public:
     explicit SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog();
+    void updateSVMLoadedLabel();
     void updateFieldsWithValues();
     void addMainWorker(MainWorker *);
     void addRecognitionManager(RecognitionManager *);

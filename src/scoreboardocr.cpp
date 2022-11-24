@@ -52,6 +52,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(ui->erodeSlider, SIGNAL(valueChanged(int)), this, SLOT(changeErode(int)));              // Update erode
     connect(ui->italicSlider, SIGNAL(valueChanged(int)), this, SLOT(changeItalic(int)));            // Update italic
     connect(ui->dialateSlider, SIGNAL(valueChanged(int)), this, SLOT(changeDialate(int)));          // Update dialate
+    connect(ui->invertColorsCheckbox, SIGNAL(toggled(bool)), this, SLOT(changeInvert(bool)));       // Update color invert
     connect(ui->thresholdSlider, SIGNAL(valueChanged(int)), this, SLOT(changeThreshold(int)));      // Update threshold
 
     connect(ui->addSelectionButton, SIGNAL(released()), this, SLOT(addSelection()));                // Add selection button pressed
@@ -252,6 +253,11 @@ void ScoreboardOCR::updateEdges(QList<QPoint> points)
 {
     capManager->setEdges(points);
     updateCaptureTab();
+}
+
+void ScoreboardOCR::changeInvert(bool val)
+{
+    filManager->setInvert(val);
 }
 
 void ScoreboardOCR::changeGaps(int val)

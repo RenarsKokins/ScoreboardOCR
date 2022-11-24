@@ -15,6 +15,7 @@ public:
     void createImageWithFilters(cv::Mat *, QList<QPoint>);  // Creates a image with filters and transformation applied
 
 public slots:
+    void setInvert(bool);
     void setItalic(short);
     void setBlur(unsigned short);
     void setErode(unsigned short);
@@ -27,6 +28,7 @@ private:
     cv::Point2f src[4];     // Source quadangle (used for perspective transform)
     cv::Point2f dst[4];     // Destination quadangle (used for perspective transform)
     short italic = 0;
+    bool invert = false;
     unsigned short blur = 0;
     unsigned short erode = 0;
     unsigned short dialate = 0;
