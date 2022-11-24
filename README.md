@@ -43,10 +43,11 @@ Coming soon!
 
 ### Linux
 
-Right not it is only possible to build from source.
+Right now it is only possible to build from source.
 
 1. Get QT creator/QT6 framework on your computer (``sudo pacman -S qt6-base`` or ``sudo apt install qt6-base-dev``),
 2. Get OpenCV (``sudo pacman -S opencv`` or build from [source](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)),
-3. Build ScoreboardOCR project,
-4. If no errors occur, you are done!
+3. Get ``pkg-config`` package (``sudo pacman -S pkg-config`` or ``sudo apt-get install pkg-config``),
+4. Build ScoreboardOCR project,
+5. If no errors occur, you are done!
 
