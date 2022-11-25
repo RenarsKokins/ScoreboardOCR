@@ -43,11 +43,13 @@ public slots:
     void setOutputFilename();           // Set output filename from lineedit
     void changeThreshold(int);          // Change threshold value in FilterManager
     void setOutputFormat(int);          // Set output format
+    void updateDeviceDropdown();        // Update UI device combobox
     void setCurrentDevice(int val);     // Combobox device select slot
     void updateEdges(QList<QPoint>);    // Update edges for image transformation
     void displayMainImage(cv::Mat *);   // Display main image in GUI
     void displaySmallImage(cv::Mat *);  // Display small image in GUI
     void updateSelectionCoordinates(QRect); // Update selection rectangle coords
+
 
 signals:
     void startMainWorker();             // Starts main worker thread
@@ -67,7 +69,6 @@ private:
     // UI updates
     void updateOutputTab();
     void updateCaptureTab();
-    int updateDeviceDropdown();
     void updateRecognitionTab();
     void addFormatsToOutputTab();
     void closeEvent(QCloseEvent *) override;

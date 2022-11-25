@@ -45,6 +45,7 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
 
     connect(ui->edgesButton, SIGNAL(released()), this, SLOT(doEdges()));                                        // Edges button pressed
     connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                    // Capture button pressed
+    connect(ui->refreshCaptureDeviceButton, SIGNAL(released()), this, SLOT(updateDeviceDropdown()));            // Refresh capture device dropdown
     connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));    // Combobox device select
 
     connect(ui->blurSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBlur(int)));                // Update blur
@@ -96,8 +97,9 @@ ScoreboardOCR::~ScoreboardOCR()
     delete settingsManager;
 }
 
-int ScoreboardOCR::updateDeviceDropdown()
+void ScoreboardOCR::updateDeviceDropdown()
 {
+    ui->captureDeviceComboBox->clear();
     for (Camera &cam : capManager->getDevices())
     {
         #ifndef Q_OS_UNIX
@@ -107,7 +109,6 @@ int ScoreboardOCR::updateDeviceDropdown()
         ui->captureDeviceComboBox->addItem(cam.name + " | " + cam.description);
         #endif
     }
-    return 1;
 }
 
 void ScoreboardOCR::updateCaptureTab()
@@ -127,10 +128,12 @@ void ScoreboardOCR::updateCaptureTab()
     {
         ui->captureButton->setText("Stop capture");
         ui->edgesButton->setEnabled(true);
+        ui->refreshCaptureDeviceButton->setEnabled(false);
     } else
     {
         ui->captureButton->setText("Start capture");
         ui->edgesButton->setEnabled(false);
+        ui->refreshCaptureDeviceButton->setEnabled(true);
         return;
     }
 
@@ -227,12 +230,18 @@ void ScoreboardOCR::resizeEvent(QResizeEvent *event)
 
 void ScoreboardOCR::displayMainImage(cv::Mat *img)
 {
+    qDebug() << ui->mainImage->size().width();
+    qDebug() << ui->mainImage->width();
+
+    if(ui->mainImage->size().width() < 1)
+        ui->mainImage->fitInView(mainGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
     mainGraphicsScene->paintBackground(img);
-    // mainGraphicsScene->paintForeground();
 }
 
 void ScoreboardOCR::displaySmallImage(cv::Mat *img)
 {
+    if(ui->smallImage->size().width() < 1)
+        ui->smallImage->fitInView(smallGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
     smallGraphicsScene->paintBackground(img);
 }
 
