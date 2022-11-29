@@ -24,6 +24,16 @@ void SelectionDialog::accept()
         QMessageBox::information(this, tr("Info"), tr("You must specify a name for selection!"), QMessageBox::Ok);
         return;
     }
+
+    // Check uniqueness of our new word
+    for(QString &uName : uniqueNames)
+    {
+        if(uName != ui->selectionName->text())
+            continue;
+        QMessageBox::information(this, tr("Info"), tr("Please enter a unique name for selection!"), QMessageBox::Ok);
+        return;
+    }
+
     if(ui->selectionTypeComboBox->currentIndex() < 0)
     {
         QMessageBox::information(this, tr("Info"), tr("You must select a type!"), QMessageBox::Ok);
@@ -47,4 +57,10 @@ QString SelectionDialog::getName()
 SelectionType SelectionDialog::getType()
 {
     return selectionType;
+}
+
+void SelectionDialog::setUniqueNames(QList<QString> names)
+{
+    uniqueNames.clear();
+    uniqueNames.append(names);
 }

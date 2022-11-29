@@ -230,18 +230,18 @@ void ScoreboardOCR::resizeEvent(QResizeEvent *event)
 
 void ScoreboardOCR::displayMainImage(cv::Mat *img)
 {
-    qDebug() << ui->mainImage->size().width();
-    qDebug() << ui->mainImage->width();
+    // Resize image if it is too big
+    if(ui->mainImage->width() - ui->mainImage->viewport()->width() > 10)
+      ui->mainImage->fitInView(mainGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
 
-    if(ui->mainImage->size().width() < 1)
-        ui->mainImage->fitInView(mainGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
     mainGraphicsScene->paintBackground(img);
 }
 
 void ScoreboardOCR::displaySmallImage(cv::Mat *img)
 {
-    if(ui->smallImage->size().width() < 1)
-        ui->smallImage->fitInView(smallGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
+    // Resize image if it is too big
+    if(ui->smallImage->width() - ui->smallImage->viewport()->width() > 10)
+      ui->smallImage->fitInView(smallGraphicsScene->getMainPixmap(), Qt::KeepAspectRatio);
     smallGraphicsScene->paintBackground(img);
 }
 
@@ -251,6 +251,7 @@ void ScoreboardOCR::doEdges()
     {
         capManager->clearEdges();
         mainGraphicsScene->clearEdgePoints();
+        mainGraphicsScene->stopShowingSelections();
     } else
     {
         capManager->startMarkingEdges();
@@ -261,6 +262,7 @@ void ScoreboardOCR::doEdges()
 void ScoreboardOCR::updateEdges(QList<QPoint> points)
 {
     capManager->setEdges(points);
+    mainGraphicsScene->startShowingSelections();
     updateCaptureTab();
 }
 
@@ -302,6 +304,15 @@ void ScoreboardOCR::changeThreshold(int val)
 void ScoreboardOCR::addSelection()
 {
     SelectionDialog dialog(this);
+
+    // Add selection names to dialog so that we can add only unique names to selections
+    QList<QString> uniqueNames;
+    for(Selection &selection : *recManager->getSelections())
+    {
+        uniqueNames.append(selection.getName());
+    }
+    dialog.setUniqueNames(uniqueNames);
+
     bool accepted = 0;
     accepted = dialog.exec();
     if(!accepted)

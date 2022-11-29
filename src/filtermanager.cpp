@@ -31,11 +31,14 @@ void FilterManager::createImageWithFilters(cv::Mat *image, QList<QPoint> points)
         src[i] = cv::Point2f(points[i].x(), points[i].y());
     }
 
+    // Italic skew is based proportionally based on image width
+    int italicAdjusted = (italic * image->cols) / 100;
+
     // italic transforamtion is made here
-    dst[0] = cv::Point2f(0 + italic, 0);
-    dst[1] = cv::Point2f(image->cols + italic, 0);
-    dst[2] = cv::Point2f(0 - italic, image->rows);
-    dst[3] = cv::Point2f(image->cols - italic, image->rows);
+    dst[0] = cv::Point2f(0 + italicAdjusted, 0);
+    dst[1] = cv::Point2f(image->cols + italicAdjusted, 0);
+    dst[2] = cv::Point2f(0 - italicAdjusted, image->rows);
+    dst[3] = cv::Point2f(image->cols - italicAdjusted, image->rows);
 
     cv::Mat M = cv::getPerspectiveTransform(src, dst);
     cv::Size dsize = cv::Size(image->cols, image->rows);

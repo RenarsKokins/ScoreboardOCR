@@ -18,18 +18,12 @@ void MainWorker::doWork()
     std::chrono::time_point lastTime = std::chrono::steady_clock::now();
     while(!QThread::currentThread()->isInterruptionRequested())
     {
-        // check if interrupt has happened, if not, loop
-        // get image from camera
-        // apply filters to that image
-        // do detection
-        // save data
-        // signal small and main image display
-
         // Limit capture updates to a certain FPS
         long timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastTime).count();
         if(timeElapsed < (1000/fps))
         {
-            QThread::msleep((1000/fps) - timeElapsed);
+            //QThread::msleep((1000/fps) - timeElapsed);
+            capManager->captureFrame(); // We need to constantly capture from camera, so buffer is always fresh
             continue;
         }
         lastTime = std::chrono::steady_clock::now();

@@ -19,6 +19,8 @@ public:
     void paintForeground();             // Draw edges, detection boxes, etc.
     void clearEdgePoints();             // Clears points which are drawn
     void removeSelection(int);          // Remove selection at index
+    void stopShowingSelections();       // Make selections invisible
+    void startShowingSelections();      // Make selections visible
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
@@ -33,7 +35,7 @@ private:
     QPoint mouseStartPos;               // Mouse starting position (on click)
     QList<QPoint> points;               // A list of points for image transforamtion
     CaptureManager *capManager;         // Pointer to capture manager
-    const int edgePointSize = 10;       // Size of ellipse to draw
+    int edgePointSize = 10;             // Size of ellipse to draw
     RecognitionManager *recManager;     // Pointer to recognition maanger
     QList<QGraphicsEllipseItem *> edges;// A list of edges (used for UI only)
     QList<QGraphicsRectItem *> selectionBoxes;  // A list of selection boxes (used for UI only)

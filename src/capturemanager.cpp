@@ -162,6 +162,7 @@ CaptureManager::CaptureManager()
 
 CaptureManager::~CaptureManager()
 {
-    stopCapture();
+    if(flags.testFlag(CaptureManager::captureStarted))
+        stopCapture();
     qDebug() << "Destroying caputure manager...";
 }

@@ -24,6 +24,7 @@ MainCaptureScene::~MainCaptureScene()
 
 void MainCaptureScene::drawEdgePoints()
 {
+    edgePointSize = (this->width() / 50) + 1;
     for (QPoint &point : points)
     {
         // Add edges to UI
@@ -91,7 +92,7 @@ void MainCaptureScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         QBrush brush;
         pen.setColor(Qt::black);
         pen.setBrush(Qt::SolidPattern);
-        brush.setColor(Qt::red);
+        brush.setColor(QColor(rand()%255, rand()%255, rand()%255));
         brush.setStyle(Qt::SolidPattern);
 
         // Add a graphical square to scene
@@ -138,4 +139,20 @@ void MainCaptureScene::removeSelection(int i)
 {
     this->removeItem(selectionBoxes.at(i));
     selectionBoxes.removeAt(i);
+}
+
+void MainCaptureScene::stopShowingSelections()
+{
+    for(QGraphicsRectItem *sel : selectionBoxes)
+    {
+        sel->setVisible(false);
+    }
+}
+
+void MainCaptureScene::startShowingSelections()
+{
+    for(QGraphicsRectItem *sel : selectionBoxes)
+    {
+        sel->setVisible(true);
+    }
 }
