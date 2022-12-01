@@ -28,12 +28,8 @@ public:
     int getNoiseIgnoreSize();
     float getNoiseIgnoreRatio();
 
-signals:
-    void emitSave(SettingsDialog *);
-
 private slots:
     void showFileExplorerAndUpdatePath();
-    void doSave();
 
 private:
     MainWorker *worker;

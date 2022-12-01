@@ -46,13 +46,12 @@ void SettingsManager::showSettingsDialog(QWidget *parent)
     dialog.addMainWorker(worker);
     dialog.addRecognitionManager(recManager);
     dialog.updateFieldsWithValues();
-    connect(&dialog, SIGNAL(emitSave(SettingsDialog*)), this, SLOT(doSave(SettingsDialog*)));
 
     bool applied = 0;
     applied = dialog.exec();
     if(!applied)
         return;
-    updateSettings(&dialog);
+    saveSettings(&dialog);
 }
 
 void SettingsManager::loadSettings()
@@ -137,7 +136,3 @@ void SettingsManager::saveSettings(SettingsDialog *dialog = nullptr)
     fout.close();
 }
 
-void SettingsManager::doSave(SettingsDialog *dialog)
-{
-    saveSettings(dialog);
-}

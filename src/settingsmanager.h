@@ -23,9 +23,6 @@ public:
     void showSettingsDialog(QWidget *parent);           // Show a settings dialog which might change settings
     void addRecognitionManager(RecognitionManager *);
 
-public slots:
-    void doSave(SettingsDialog *);                      // Slot for calling saveSettings
-
 private:
     MainWorker *worker;
     OutputManager *outManager;

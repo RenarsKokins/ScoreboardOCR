@@ -9,7 +9,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->pathSelectButton, SIGNAL(released()), this, SLOT(showFileExplorerAndUpdatePath()));
-    connect(ui->saveButton, SIGNAL(released()), this, SLOT(doSave()));
 }
 
 void SettingsDialog::updateSVMLoadedLabel()
@@ -83,11 +82,6 @@ float SettingsDialog::getNoiseIgnoreRatio()
 int SettingsDialog::getFps()
 {
     return ui->fpsSpinbox->value();
-}
-
-void SettingsDialog::doSave()
-{
-    emit emitSave(this);
 }
 
 bool SettingsDialog::getSaveNumbers()
