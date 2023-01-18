@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/graphics/logo.png" />
+  <img src="/scoreboardocr/graphics/logo.png" />
 </p>
 
 ## About ScoreboardOCR
