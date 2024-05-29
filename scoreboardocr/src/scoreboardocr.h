@@ -44,7 +44,9 @@ public slots:
     void changeThreshold(int);          // Change threshold value in FilterManager
     void setOutputFormat(int);          // Set output format
     void updateDeviceDropdown();        // Update UI device combobox
-    void setCurrentDevice(int val);     // Combobox device select slot
+    void setCurrentDevice(int);         // Combobox device select slot
+    void setCaptureType(int);           // Capture type tab slot
+    void setCameraIPAddress(QString);   // Set camera IP address
     void updateEdges(QList<QPoint>);    // Update edges for image transformation
     void displayMainImage(cv::Mat *);   // Display main image in GUI
     void displaySmallImage(cv::Mat *);  // Display small image in GUI

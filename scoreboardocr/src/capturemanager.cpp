@@ -14,6 +14,27 @@ void CaptureManager::changeCurrentDeviceIndex(short index)
         flags.setFlag(CaptureManager::captureSelected, true);
 }
 
+void CaptureManager::setCameraIPAddress(QString val)
+{
+    if (val.isEmpty())
+        return;
+    ipAddress = val;
+}
+
+void CaptureManager::changeCaptureType(CaptureType type)
+{
+    switch(type)
+    {
+        case CaptureType::USB:
+            flags.setFlag(CaptureManager::captureSelected, false);
+            break;
+        case CaptureType::IP:
+            flags.setFlag(CaptureManager::captureSelected, true);
+            break;
+    }
+    captureType = type;
+}
+
 bool CaptureManager::captureFrame()
 {
     capture.read(frame);
@@ -30,7 +51,7 @@ cv::Mat *CaptureManager::getFrame()
     return &frame;
 }
 
-int CaptureManager::initCapture()
+int CaptureManager::initUSBCapture()
 {
     if (curDeviceIndex < 0 || captureDevices.isEmpty())
     {
@@ -47,6 +68,37 @@ int CaptureManager::initCapture()
     flags.setFlag(CaptureManager::captureStarted, true);
     qDebug() << "Capture initiated!";
     return 1;
+}
+
+int CaptureManager::initIPCapture()
+{
+    if (ipAddress.isEmpty())
+    {
+        qWarning() << "No IP address specified!";
+        return -1;
+    }
+
+    capture.open(ipAddress.toStdString(), cv::CAP_ANY); // Start the capture
+    if (!capture.isOpened())
+    {
+        qWarning() << "Cannot open capture device!";
+        return 0;
+    }
+    flags.setFlag(CaptureManager::captureStarted, true);
+    qDebug() << "Capture initiated!";
+    return 1;
+}
+
+int CaptureManager::initCapture()
+{
+    switch (captureType) {
+    case CaptureManager::USB:
+        return initUSBCapture();
+        break;
+    case CaptureManager::IP:
+        return initIPCapture();
+        break;
+    }
 }
 
 int CaptureManager::stopCapture()

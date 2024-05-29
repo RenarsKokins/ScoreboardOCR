@@ -252,37 +252,125 @@
         <string>Capture</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="7" column="0" colspan="2">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+        <item row="1" column="0" colspan="2">
+         <widget class="QTabWidget" name="captureTypeTab">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Select resolution:</string>
-          </property>
+          <widget class="QWidget" name="USBCapture">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <attribute name="title">
+            <string>USB capture</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="1" column="0" colspan="2">
+             <widget class="QComboBox" name="captureDeviceComboBox">
+              <property name="currentText">
+               <string/>
+              </property>
+              <property name="placeholderText">
+               <string>Select device...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="deviceResolutionComboBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="placeholderText">
+               <string>Default</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Select resolution:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Select capture device:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="refreshCaptureDeviceButton">
+              <property name="text">
+               <string>Refresh devices</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0" colspan="2">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="IPCapture">
+           <attribute name="title">
+            <string>IP capture</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="0" column="0" colspan="2">
+             <widget class="QLineEdit" name="ipAddressBox">
+              <property name="placeholderText">
+               <string>IP address to your camera (ex. rtsp://192.168.1.100:5555)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="deviceResolutionComboBox_2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="placeholderText">
+               <string>Default</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>181</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Select resolution:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
-        <item row="3" column="0" colspan="2">
-         <widget class="QComboBox" name="captureDeviceComboBox">
-          <property name="currentText">
-           <string/>
-          </property>
-          <property name="placeholderText">
-           <string>Select device...</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
+        <item row="3" column="0">
          <widget class="QPushButton" name="captureButton">
           <property name="enabled">
            <bool>false</bool>
@@ -292,37 +380,13 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QComboBox" name="deviceResolutionComboBox">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="placeholderText">
-           <string>Default</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
+        <item row="3" column="1">
          <widget class="QPushButton" name="edgesButton">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="text">
            <string>Mark edges</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Select capture device:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="refreshCaptureDeviceButton">
-          <property name="text">
-           <string>Refresh devices</string>
           </property>
          </widget>
         </item>

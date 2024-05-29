@@ -47,6 +47,8 @@ ScoreboardOCR::ScoreboardOCR(QWidget *parent)
     connect(ui->captureButton, SIGNAL(released()), this, SLOT(doCapture()));                                    // Capture button pressed
     connect(ui->refreshCaptureDeviceButton, SIGNAL(released()), this, SLOT(updateDeviceDropdown()));            // Refresh capture device dropdown
     connect(ui->captureDeviceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDevice(int)));    // Combobox device select
+    connect(ui->captureTypeTab, SIGNAL(currentChanged(int)), this, SLOT(setCaptureType(int)));                  // Capture type tab selected
+    connect(ui->ipAddressBox, SIGNAL(textChanged(QString)), this, SLOT(setCameraIPAddress(QString)));           // Set IP address of camera
 
     connect(ui->blurSlider, SIGNAL(valueChanged(int)), this, SLOT(changeBlur(int)));                // Update blur
     connect(ui->gapsSlider, SIGNAL(valueChanged(int)), this, SLOT(changeGaps(int)));                // Update gaps
@@ -129,11 +131,13 @@ void ScoreboardOCR::updateCaptureTab()
         ui->captureButton->setText("Stop capture");
         ui->edgesButton->setEnabled(true);
         ui->refreshCaptureDeviceButton->setEnabled(false);
+        ui->captureTypeTab->setEnabled(false);
     } else
     {
         ui->captureButton->setText("Start capture");
         ui->edgesButton->setEnabled(false);
         ui->refreshCaptureDeviceButton->setEnabled(true);
+        ui->captureTypeTab->setEnabled(true);
         return;
     }
 
@@ -171,6 +175,28 @@ void ScoreboardOCR::setCurrentDevice(int val)
     updateCaptureTab();
 }
 
+void ScoreboardOCR::setCaptureType(int val)
+{
+    CaptureManager::CaptureType type;
+    switch (val) {
+    case 0:
+        type = CaptureManager::USB;
+        break;
+    case 1:
+        type = CaptureManager::IP;
+        break;
+    default:
+        type = CaptureManager::USB;
+    }
+    capManager->changeCaptureType(type);
+    updateCaptureTab();
+}
+
+void ScoreboardOCR::setCameraIPAddress(QString str)
+{
+    capManager->setCameraIPAddress(str);
+}
+
 void ScoreboardOCR::doCapture()
 {
     if(!capManager->flags.testFlag(CaptureManager::captureStarted))
@@ -181,7 +207,7 @@ void ScoreboardOCR::doCapture()
             QMessageBox::warning(this, tr("Warning"), tr("No capture device selected!"), QMessageBox::Close);
             break;
         case 0:
-            QMessageBox::critical(this, tr("Error"), tr("Cannot open capture device! Make sure it is working and plugged in!"), QMessageBox::Close);
+            QMessageBox::critical(this, tr("Error"), tr("Cannot open capture device! Make sure it is working and plugged in, or IP address is correct!"), QMessageBox::Close);
             break;
         case 1:
             capManager->captureFrame();
